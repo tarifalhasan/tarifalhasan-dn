@@ -36,7 +36,7 @@ export const HeroSection = () => {
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="terminal-window rounded-xl p-8 mb-12 relative overflow-hidden flex items-center"
-      style={{ minHeight: "calc(100vh - 2rem)" }}
+      style={{ minHeight: "calc(100vh - 4rem)" }}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
