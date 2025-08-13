@@ -210,35 +210,7 @@ export const HeroSection = () => {
               </motion.div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 3 }}
-              className="flex flex-wrap gap-4"
-            >
-              <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(99, 102, 241, 0.5)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
-                >
-                  <Brain className="w-5 h-5 mr-2" />
-                  Explore AI Solutions
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-slate-900 bg-transparent backdrop-blur-sm"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Watch AI Demo
-                </Button>
-              </motion.div>
-            </motion.div>
+
           </motion.div>
         </div>
 
