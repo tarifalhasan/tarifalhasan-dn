@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Zap, Terminal } from "lucide-react"
+import { Github, Linkedin, Zap } from "lucide-react"
 import { motion } from "framer-motion"
 import { TypewriterText } from "./typewriter-text"
 import Image from "next/image"
@@ -35,7 +35,8 @@ export const HeroSection = () => {
       initial={{ scale: 0.9, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="terminal-window rounded-xl p-8 mb-12 relative overflow-hidden"
+      className="terminal-window rounded-xl p-8 mb-12 relative overflow-hidden flex items-center"
+      style={{ minHeight: "calc(100vh - 4rem)" }}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
@@ -60,36 +61,7 @@ export const HeroSection = () => {
         ))}
       </div>
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className="flex gap-2">
-          <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            className="w-3 h-3 rounded-full bg-red-500"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
-            className="w-3 h-3 rounded-full bg-yellow-500"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.4 }}
-            className="w-3 h-3 rounded-full bg-emerald-500"
-          />
-        </div>
-        <motion.span
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-sm text-indigo-300 flex items-center gap-2"
-        >
-          <Terminal className="w-4 h-4" />
-          portfolio-terminal-v2.1.0
-        </motion.span>
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
         {/* Terminal Content */}
         <div>
           <motion.div
@@ -256,7 +228,7 @@ export const HeroSection = () => {
               <div className="w-full h-full rounded-full overflow-hidden bg-slate-800">
                 <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                   <Image
-                    src="/developer-portrait.png"
+                    src="/tarif-portrait.jpg"
                     alt="Tarif Al Hasan - Full Stack Developer"
                     width={300}
                     height={300}

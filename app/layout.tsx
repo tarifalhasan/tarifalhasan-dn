@@ -11,7 +11,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "MD Sohag Miya - Developer Portfolio",
+  title: "Tarif Al Hasan - Developer Portfolio", // Updated name from MD Sohag Miya to Tarif Al Hasan
   description: "Passionate frontend developer creating beautiful, responsive web applications",
   generator: "v0.app",
 }
