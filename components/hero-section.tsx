@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Zap } from "lucide-react"
+import { Github, Linkedin, Brain, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
 import { TypewriterText } from "./typewriter-text"
 import Image from "next/image"
@@ -71,16 +71,16 @@ export const HeroSection = () => {
             className="space-y-3 text-sm font-mono mb-8"
           >
             <motion.div variants={itemVariants} className="text-slate-400">
-              <span className="text-emerald-400">developer@portfolio:~$</span> whoami
+              <span className="text-emerald-400">developer@ai-portfolio:~$</span> whoami
             </motion.div>
             <motion.div variants={itemVariants} className="text-emerald-400 pl-4">
-              <TypewriterText text="Full-Stack Developer & UI/UX Enthusiast" />
+              <TypewriterText text="AI-Powered Full-Stack Developer & Innovation Architect" />
             </motion.div>
             <motion.div variants={itemVariants} className="text-slate-400">
-              <span className="text-emerald-400">developer@portfolio:~$</span> cat mission.txt
+              <span className="text-emerald-400">developer@ai-portfolio:~$</span> cat ai_mission.txt
             </motion.div>
             <motion.div variants={itemVariants} className="text-cyan-300 pl-4">
-              <TypewriterText text="Code. Create. Conquer." delay={1000} />
+              <TypewriterText text="Build. Innovate. Transform with AI." delay={1000} />
             </motion.div>
           </motion.div>
 
@@ -103,8 +103,10 @@ export const HeroSection = () => {
               transition={{ delay: 2 }}
               className="text-slate-300 mb-8 text-lg leading-relaxed"
             >
-              Welcome to my digital playground. Dive into my projects, explore my skills, and let's build something
-              amazing together. I transform ideas into elegant, scalable solutions that make a difference.
+              Crafting intelligent digital experiences powered by cutting-edge AI. I specialize in building personalized
+              user interfaces, intelligent recommendation systems, and automated solutions that adapt to user behavior.
+              Let's transform your ideas into AI-enhanced applications that deliver exceptional user experiences and
+              drive meaningful engagement.
             </motion.p>
 
             <motion.div
@@ -149,8 +151,8 @@ export const HeroSection = () => {
                   size="lg"
                   className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white"
                 >
-                  <Zap className="w-5 h-5 mr-2" />
-                  Hire Me Now
+                  <Brain className="w-5 h-5 mr-2" />
+                  Explore AI Solutions
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -159,7 +161,8 @@ export const HeroSection = () => {
                   size="lg"
                   className="border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-slate-900 bg-transparent backdrop-blur-sm"
                 >
-                  Download Resume
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  See AI Projects
                 </Button>
               </motion.div>
             </motion.div>
@@ -229,7 +232,7 @@ export const HeroSection = () => {
                 <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                   <Image
                     src="/tarif-portrait.jpg"
-                    alt="Tarif Al Hasan - Full Stack Developer"
+                    alt="Tarif Al Hasan - AI-Powered Full Stack Developer"
                     width={300}
                     height={300}
                     className="w-full h-full object-cover"
@@ -286,14 +289,18 @@ export const HeroSection = () => {
               N
             </motion.div>
 
-            {/* ChatGPT/AI */}
             <motion.div
               animate={{
                 rotate: [0, 360, 0],
-                scale: [1, 1.2, 1],
+                scale: [1, 1.3, 1],
+                boxShadow: [
+                  "0 0 20px rgba(16, 185, 129, 0.5)",
+                  "0 0 40px rgba(16, 185, 129, 0.8)",
+                  "0 0 20px rgba(16, 185, 129, 0.5)",
+                ],
               }}
               transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
-              className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-xl border-2 border-emerald-300"
+              className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-14 h-14 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-xl border-2 border-emerald-300"
             >
               🤖
             </motion.div>
