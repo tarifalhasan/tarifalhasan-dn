@@ -66,7 +66,10 @@ export const ContactSection = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // Removed recaptchaToken from request
+        body: JSON.stringify({
+          ...data,
+          recaptchaToken: "not-available", // Added recaptchaToken field that API expects
+        }),
       })
 
       if (response.ok) {
