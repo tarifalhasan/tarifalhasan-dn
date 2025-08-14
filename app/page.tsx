@@ -8,7 +8,6 @@ import { HeroSection } from "@/components/hero-section"
 import { ServicesSection } from "@/components/services-section"
 import { ContactSection } from "@/components/contact-section"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Code, Cpu, Github, Star, Calendar, Award, BookOpen, ArrowRight } from "lucide-react"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -75,7 +74,7 @@ export default function Portfolio() {
             >
               <motion.div variants={itemVariants}>
                 <h3 className="text-indigo-300 font-semibold mb-4 flex items-center gap-2">
-                  <Code className="w-5 h-5" />
+                  <span className="text-lg">💻</span>
                   Technical Skills
                 </h3>
                 <div className="space-y-4">
@@ -120,7 +119,7 @@ export default function Portfolio() {
             >
               <motion.div variants={itemVariants}>
                 <h3 className="text-cyan-300 font-semibold mb-4 flex items-center gap-2">
-                  <Cpu className="w-5 h-5" />
+                  <span className="text-lg">🚀</span>
                   Core Expertise
                 </h3>
                 <div className="space-y-3">
@@ -339,7 +338,7 @@ export default function Portfolio() {
                       variant="outline"
                       className="border-indigo-400 text-indigo-400 hover:bg-indigo-400 hover:text-slate-900 bg-transparent"
                     >
-                      <ExternalLink className="w-4 h-4 mr-2" />
+                      <span className="mr-2">🔗</span>
                       Demo
                     </Button>
                   </motion.div>
@@ -349,7 +348,7 @@ export default function Portfolio() {
                       variant="outline"
                       className="border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-slate-900 bg-transparent"
                     >
-                      <Github className="w-4 h-4 mr-2" />
+                      <span className="mr-2">📁</span>
                       Code
                     </Button>
                   </motion.div>
@@ -427,8 +426,9 @@ export default function Portfolio() {
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ delay: index * 0.1 + i * 0.1 }}
                       viewport={{ once: true }}
+                      className="text-yellow-400"
                     >
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ⭐
                     </motion.div>
                   ))}
                 </div>
@@ -488,7 +488,7 @@ export default function Portfolio() {
                 className="glass-effect rounded-lg p-6 group cursor-pointer"
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <BookOpen className="w-4 h-4 text-indigo-400" />
+                  <span className="text-lg">📖</span>
                   <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">{article.category}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-indigo-300 mb-3 group-hover:text-indigo-200 transition-colors">
@@ -497,7 +497,7 @@ export default function Portfolio() {
                 <p className="text-slate-300 text-sm mb-4 leading-relaxed">{article.excerpt}</p>
                 <div className="flex justify-between items-center text-xs text-slate-400">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-3 h-3" />
+                    <span>📅</span>
                     {article.date}
                   </div>
                   <span>{article.readTime}</span>
@@ -506,7 +506,7 @@ export default function Portfolio() {
                   className="flex items-center gap-2 mt-4 text-indigo-400 text-sm group-hover:text-indigo-300 transition-colors"
                   whileHover={{ x: 5 }}
                 >
-                  Read More <ArrowRight className="w-4 h-4" />
+                  Read More <span>→</span>
                 </motion.div>
               </motion.div>
             ))}
@@ -549,7 +549,7 @@ export default function Portfolio() {
                 title: "MongoDB",
                 subtitle: "Certified Developer",
                 icon: "🍃",
-                year: "2023",
+                year: "2022",
               },
               {
                 title: "React",
@@ -576,7 +576,7 @@ export default function Portfolio() {
                 </h3>
                 <p className="text-slate-300 text-sm mb-2">{achievement.subtitle}</p>
                 <div className="flex items-center justify-center gap-1 text-xs text-slate-400">
-                  <Award className="w-3 h-3" />
+                  <span>🏆</span>
                   {achievement.year}
                 </div>
               </motion.div>

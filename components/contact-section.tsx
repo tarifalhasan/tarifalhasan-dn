@@ -74,15 +74,37 @@ export const ContactSection = () => {
     script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
     script.async = true
     script.defer = true
+
     script.onload = () => {
-      window.grecaptcha.ready(() => {
-        setIsRecaptchaLoaded(true)
-      })
+      try {
+        if (window.grecaptcha) {
+          window.grecaptcha.ready(() => {
+            try {
+              setIsRecaptchaLoaded(true)
+            } catch (error) {
+              console.warn("reCAPTCHA ready callback failed:", error)
+            }
+          })
+        }
+      } catch (error) {
+        console.warn("reCAPTCHA initialization failed:", error)
+      }
     }
+
+    script.onerror = (error) => {
+      console.warn("reCAPTCHA script failed to load:", error)
+    }
+
     document.head.appendChild(script)
 
     return () => {
-      document.head.removeChild(script)
+      try {
+        if (document.head.contains(script)) {
+          document.head.removeChild(script)
+        }
+      } catch (error) {
+        console.warn("Failed to cleanup reCAPTCHA script:", error)
+      }
     }
   }, [])
 
@@ -93,14 +115,26 @@ export const ContactSection = () => {
     try {
       let recaptchaToken = "not-available"
 
-      // Generate reCAPTCHA token if available
       if (isRecaptchaLoaded && window.grecaptcha) {
         const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
         if (siteKey) {
           try {
-            recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "contact_form" })
+            const tokenPromise = window.grecaptcha.execute(siteKey, { action: "contact_form" })
+
+            const token = await Promise.race([
+              tokenPromise,
+              new Promise<string>((_, reject) => setTimeout(() => reject(new Error("reCAPTCHA timeout")), 10000)),
+            ]).catch((error) => {
+              console.warn("reCAPTCHA execution failed:", error)
+              return null
+            })
+
+            if (token && typeof token === "string" && token.length > 0) {
+              recaptchaToken = token
+            }
           } catch (error) {
-            console.warn("reCAPTCHA execution failed:", error)
+            console.warn("reCAPTCHA execution error:", error)
+            // Continue with "not-available" token
           }
         }
       }
@@ -114,20 +148,51 @@ export const ContactSection = () => {
           ...data,
           recaptchaToken,
         }),
+      }).catch((error) => {
+        console.error("Fetch request failed:", error)
+        throw new Error("Network request failed")
       })
+
+      if (!response) {
+        throw new Error("No response received from server")
+      }
 
       if (response.ok) {
         setSubmitStatus("success")
         form.reset()
       } else {
+        let errorMessage = "Unknown error occurred"
+        try {
+          const errorData = await response.json()
+          errorMessage = errorData?.error || errorData?.message || errorMessage
+        } catch (parseError) {
+          console.warn("Failed to parse error response:", parseError)
+          errorMessage = `Server error: ${response.status} ${response.statusText}`
+        }
+
+        console.error("Form submission failed:", errorMessage)
         setSubmitStatus("error")
       }
     } catch (error) {
+      console.error("Form submission error:", error)
       setSubmitStatus("error")
     } finally {
       setIsSubmitting(false)
     }
   }
+
+  useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      console.warn("Unhandled promise rejection caught:", event.reason)
+      event.preventDefault()
+    }
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection)
+
+    return () => {
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection)
+    }
+  }, [])
 
   return (
     <motion.div
