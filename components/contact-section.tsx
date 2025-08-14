@@ -1,8 +1,9 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import ReCAPTCHA from "react-google-recaptcha"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -18,13 +19,6 @@ const formSchema = z.object({
 })
 
 type FormData = z.infer<typeof formSchema>
-
-declare global {
-  interface Window {
-    grecaptcha: any
-    onRecaptchaLoad: () => void
-  }
-}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -60,8 +54,6 @@ export const ContactSection = () => {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
-  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false)
-  const recaptchaRef = useRef<HTMLDivElement>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -76,43 +68,19 @@ export const ContactSection = () => {
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
   const isRecaptchaConfigured = isValidRecaptchaKey(siteKey)
 
-  useEffect(() => {
-    if (!isRecaptchaConfigured) return
+  const onRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token)
+    setRecaptchaError(null)
+  }
 
-    // Load reCAPTCHA script
-    const script = document.createElement("script")
-    script.src = "https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit"
-    script.async = true
-    script.defer = true
+  const onRecaptchaError = () => {
+    setRecaptchaError("reCAPTCHA verification failed. You can still submit the form.")
+  }
 
-    window.onRecaptchaLoad = () => {
-      setRecaptchaLoaded(true)
-      if (window.grecaptcha && recaptchaRef.current) {
-        window.grecaptcha.render(recaptchaRef.current, {
-          sitekey: siteKey,
-          theme: "dark",
-          callback: (token: string) => {
-            setRecaptchaToken(token)
-            setRecaptchaError(null)
-          },
-          "error-callback": () => {
-            setRecaptchaError("reCAPTCHA verification failed. You can still submit the form.")
-          },
-          "expired-callback": () => {
-            setRecaptchaToken(null)
-            setRecaptchaError("reCAPTCHA expired. Please verify again.")
-          },
-        })
-      }
-    }
-
-    document.head.appendChild(script)
-
-    return () => {
-      document.head.removeChild(script)
-      delete window.onRecaptchaLoad
-    }
-  }, [isRecaptchaConfigured, siteKey])
+  const onRecaptchaExpired = () => {
+    setRecaptchaToken(null)
+    setRecaptchaError("reCAPTCHA expired. Please verify again.")
+  }
 
   const onSubmit = async (data: FormData) => {
     if (isRecaptchaConfigured && !recaptchaToken) {
@@ -140,10 +108,6 @@ export const ContactSection = () => {
         setSubmitStatus("success")
         form.reset()
         setRecaptchaToken(null)
-        // Reset reCAPTCHA
-        if (isRecaptchaConfigured && window.grecaptcha) {
-          window.grecaptcha.reset()
-        }
       } else {
         const errorData = await response.json().catch(() => ({}))
         setSubmitStatus("error")
@@ -271,16 +235,16 @@ export const ContactSection = () => {
                 />
               </motion.div>
 
-              {isRecaptchaConfigured && (
+              {isRecaptchaConfigured && siteKey && (
                 <motion.div variants={itemVariants} className="flex justify-center">
                   <div className="bg-slate-800/30 p-2 rounded-lg backdrop-blur-sm border border-slate-600">
-                    {recaptchaLoaded ? (
-                      <div ref={recaptchaRef} />
-                    ) : (
-                      <div className="h-[78px] bg-slate-800/30 rounded-lg animate-pulse flex items-center justify-center">
-                        <div className="text-slate-400 text-sm">Loading reCAPTCHA...</div>
-                      </div>
-                    )}
+                    <ReCAPTCHA
+                      sitekey={siteKey}
+                      onChange={onRecaptchaChange}
+                      onError={onRecaptchaError}
+                      onExpired={onRecaptchaExpired}
+                      theme="dark"
+                    />
                   </div>
                 </motion.div>
               )}
