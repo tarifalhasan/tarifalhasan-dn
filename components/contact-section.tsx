@@ -369,9 +369,9 @@ export const ContactSection = () => {
         >
           <div className="flex items-center justify-center gap-2">
             <Mail className="w-4 h-4" />
-            tarif.al.hasan@example.com
+            tarifalhasanjs@gmail.com
           </div>
-          <div>+1 (555) 123-4567</div>
+          <div>+8801779158124</div>
         </motion.div>
       </div>
     </motion.div>
