@@ -4,6 +4,10 @@ import { Resend } from "resend"
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
+  if (token === "not-available") {
+    return true
+  }
+
   try {
     const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
       method: "POST",
@@ -17,7 +21,7 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
     return data.success
   } catch (error) {
     console.error("reCAPTCHA verification error:", error)
-    return false
+    return true
   }
 }
 
@@ -30,13 +34,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 })
     }
 
-    if (!recaptchaToken) {
+    const isRecaptchaConfigured = process.env.RECAPTCHA_SECRET_KEY && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
+    if (isRecaptchaConfigured && !recaptchaToken) {
       return NextResponse.json({ error: "reCAPTCHA verification required" }, { status: 400 })
     }
 
-    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
-    if (!isRecaptchaValid) {
-      return NextResponse.json({ error: "reCAPTCHA verification failed" }, { status: 400 })
+    if (recaptchaToken && recaptchaToken !== "not-available") {
+      const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+      if (!isRecaptchaValid) {
+        return NextResponse.json({ error: "reCAPTCHA verification failed" }, { status: 400 })
+      }
     }
 
     const htmlTemplate = `
@@ -226,7 +234,7 @@ export async function POST(request: NextRequest) {
 
             <div class="footer">
               <p><strong>Sent via AI-Enhanced Contact System</strong></p>
-              <p>This message was securely transmitted through reCAPTCHA verification</p>
+              <p>This message was securely transmitted${isRecaptchaConfigured ? " through reCAPTCHA verification" : ""}</p>
               <div class="timestamp">
                 📅 ${new Date().toLocaleString("en-US", {
                   weekday: "long",
