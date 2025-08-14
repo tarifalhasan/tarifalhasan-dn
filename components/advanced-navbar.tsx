@@ -45,8 +45,8 @@ export const AdvancedNavbar = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
 
-    // Observe all sections
-    const sections = document.querySelectorAll("section[id]")
+    // Observe all elements with an ID
+    const sections = document.querySelectorAll("[id]")
     sections.forEach((section) => observer.observe(section))
 
     return () => {
