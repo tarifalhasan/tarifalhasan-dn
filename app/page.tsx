@@ -8,6 +8,8 @@ import { HeroSection } from "@/components/hero-section"
 import { ServicesSection } from "@/components/services-section"
 import { ContactSection } from "@/components/contact-section"
 import { Button } from "@/components/ui/button"
+import { BlogModal } from "@/components/blog-modal"
+import { blogPosts, type BlogPost } from "@/data/blog-posts"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -36,6 +38,18 @@ export default function Portfolio() {
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], [0, -50])
   const [activeSection, setActiveSection] = useState("hero")
+  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null)
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
+
+  const openBlogModal = (post: BlogPost) => {
+    setSelectedBlogPost(post)
+    setIsBlogModalOpen(true)
+  }
+
+  const closeBlogModal = () => {
+    setIsBlogModalOpen(false)
+    setSelectedBlogPost(null)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-slate-100 relative overflow-hidden">
@@ -358,6 +372,42 @@ export default function Portfolio() {
           </motion.div>
         </motion.div>
 
+        {/* Blog & Articles */}
+        <div className="glass-effect rounded-xl p-8 mb-12">
+          <div className="text-emerald-400 mb-6 font-mono">
+            <span className="text-slate-400">$</span> find ./blog -name "*.md" | head -3
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {blogPosts.map((article, index) => (
+              <div
+                key={article.id}
+                className="glass-effect rounded-lg p-6 group cursor-pointer"
+                onClick={() => openBlogModal(article)}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">📖</span>
+                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">{article.category}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-indigo-300 mb-3 group-hover:text-indigo-200 transition-colors">
+                  {article.title}
+                </h3>
+                <p className="text-slate-300 text-sm mb-4 leading-relaxed">{article.excerpt}</p>
+                <div className="flex justify-between items-center text-xs text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span>📅</span>
+                    {article.date}
+                  </div>
+                  <span>{article.readTime}</span>
+                </div>
+                <div className="flex items-center gap-2 mt-4 text-indigo-400 text-sm group-hover:text-indigo-300 transition-colors">
+                  Read More <span>→</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Testimonials */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -438,81 +488,6 @@ export default function Portfolio() {
           </motion.div>
         </motion.div>
 
-        {/* Blog & Articles */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="glass-effect rounded-xl p-8 mb-12"
-        >
-          <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> find ./blog -name "*.md" | head -3
-          </div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {[
-              {
-                title: "Building Scalable React Applications",
-                excerpt:
-                  "Best practices for architecting large-scale React applications with performance optimization techniques.",
-                date: "Dec 15, 2024",
-                readTime: "8 min read",
-                category: "React",
-              },
-              {
-                title: "Modern API Design Patterns",
-                excerpt: "Exploring RESTful and GraphQL API design patterns for building robust backend services.",
-                date: "Dec 10, 2024",
-                readTime: "12 min read",
-                category: "Backend",
-              },
-              {
-                title: "DevOps for Full-Stack Developers",
-                excerpt: "Essential DevOps practices every full-stack developer should know for efficient deployment.",
-                date: "Dec 5, 2024",
-                readTime: "10 min read",
-                category: "DevOps",
-              },
-            ].map((article, index) => (
-              <motion.div
-                key={article.title}
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
-                className="glass-effect rounded-lg p-6 group cursor-pointer"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg">📖</span>
-                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">{article.category}</span>
-                </div>
-                <h3 className="text-lg font-semibold text-indigo-300 mb-3 group-hover:text-indigo-200 transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-slate-300 text-sm mb-4 leading-relaxed">{article.excerpt}</p>
-                <div className="flex justify-between items-center text-xs text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <span>📅</span>
-                    {article.date}
-                  </div>
-                  <span>{article.readTime}</span>
-                </div>
-                <motion.div
-                  className="flex items-center gap-2 mt-4 text-indigo-400 text-sm group-hover:text-indigo-300 transition-colors"
-                  whileHover={{ x: 5 }}
-                >
-                  Read More <span>→</span>
-                </motion.div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
-
         {/* Achievements & Certifications */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -571,7 +546,7 @@ export default function Portfolio() {
                 >
                   {achievement.icon}
                 </motion.div>
-                <h3 className="text-indigo-300 font-semibold mb-1 group-hover:text-indigo-200 transition-colors">
+                <h3 className="text-lg font-semibold text-indigo-300 mb-1 group-hover:text-indigo-200 transition-colors">
                   {achievement.title}
                 </h3>
                 <p className="text-slate-300 text-sm mb-2">{achievement.subtitle}</p>
@@ -586,6 +561,9 @@ export default function Portfolio() {
 
         <ContactSection />
       </motion.div>
+
+      {/* BlogModal component */}
+      <BlogModal isOpen={isBlogModalOpen} onClose={closeBlogModal} post={selectedBlogPost} />
     </div>
   )
 }
