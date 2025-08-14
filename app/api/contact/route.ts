@@ -3,21 +3,41 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-async function verifyRecaptcha(token: string): Promise<boolean> {
+async function verifyRecaptcha(token: string) {
+  if (token === "not-available") {
+    return { success: true, score: 1.0 }
+  }
+
   try {
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY
+
+    if (!secretKey) {
+      throw new Error("reCAPTCHA secret key is not configured")
+    }
+
     const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+      body: `secret=${secretKey}&response=${token}`,
     })
 
     const data = await response.json()
-    return data.success
+
+    // Check if the verification was successful (v3 uses score-based verification)
+    if (data.success && data.score >= 0.5) {
+      return { success: true, score: data.score }
+    } else {
+      return {
+        success: false,
+        error: "reCAPTCHA verification failed",
+        score: data.score || 0,
+      }
+    }
   } catch (error) {
     console.error("reCAPTCHA verification error:", error)
-    return false
+    return { success: false, error: "Failed to verify reCAPTCHA" }
   }
 }
 
@@ -30,13 +50,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 })
     }
 
-    if (!recaptchaToken) {
+    const isRecaptchaConfigured = process.env.RECAPTCHA_SECRET_KEY && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
+    if (isRecaptchaConfigured && !recaptchaToken) {
       return NextResponse.json({ error: "reCAPTCHA verification required" }, { status: 400 })
     }
 
-    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
-    if (!isRecaptchaValid) {
-      return NextResponse.json({ error: "reCAPTCHA verification failed" }, { status: 400 })
+    if (recaptchaToken && recaptchaToken !== "not-available") {
+      const recaptchaResult = await verifyRecaptcha(recaptchaToken)
+      if (!recaptchaResult.success) {
+        return NextResponse.json(
+          {
+            error: "Security check failed. Please try again.",
+            details: recaptchaResult.error,
+            score: recaptchaResult.score,
+          },
+          { status: 400 },
+        )
+      }
     }
 
     const htmlTemplate = `
@@ -226,7 +257,7 @@ export async function POST(request: NextRequest) {
 
             <div class="footer">
               <p><strong>Sent via AI-Enhanced Contact System</strong></p>
-              <p>This message was securely transmitted through reCAPTCHA verification</p>
+              <p>This message was securely transmitted${isRecaptchaConfigured ? " through reCAPTCHA verification" : ""}</p>
               <div class="timestamp">
                 📅 ${new Date().toLocaleString("en-US", {
                   weekday: "long",
