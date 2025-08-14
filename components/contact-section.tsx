@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import ReCAPTCHA from "react-google-recaptcha"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -43,17 +42,9 @@ const itemVariants = {
   },
 }
 
-const isValidRecaptchaKey = (key: string | undefined): boolean => {
-  if (!key || key === "") return false
-  if (key.includes("example") || key.includes("placeholder") || key.includes("your-site-key")) return false
-  return key.length >= 40 && /^[A-Za-z0-9_-]+$/.test(key)
-}
-
 export const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
-  const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -65,32 +56,9 @@ export const ContactSection = () => {
     },
   })
 
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-  const isRecaptchaConfigured = isValidRecaptchaKey(siteKey)
-
-  const onRecaptchaChange = (token: string | null) => {
-    setRecaptchaToken(token)
-    setRecaptchaError(null)
-  }
-
-  const onRecaptchaError = () => {
-    setRecaptchaError("reCAPTCHA verification failed. You can still submit the form.")
-  }
-
-  const onRecaptchaExpired = () => {
-    setRecaptchaToken(null)
-    setRecaptchaError("reCAPTCHA expired. Please verify again.")
-  }
-
   const onSubmit = async (data: FormData) => {
-    if (isRecaptchaConfigured && !recaptchaToken) {
-      setRecaptchaError("Please complete the reCAPTCHA verification.")
-      return
-    }
-
     setIsSubmitting(true)
     setSubmitStatus("idle")
-    setRecaptchaError(null)
 
     try {
       const response = await fetch("/api/contact", {
@@ -98,26 +66,17 @@ export const ContactSection = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...data,
-          recaptchaToken: recaptchaToken || "not-configured",
-        }),
+        body: JSON.stringify(data), // Removed recaptchaToken from request
       })
 
       if (response.ok) {
         setSubmitStatus("success")
         form.reset()
-        setRecaptchaToken(null)
       } else {
-        const errorData = await response.json().catch(() => ({}))
         setSubmitStatus("error")
-        if (errorData.error) {
-          setRecaptchaError(errorData.error)
-        }
       }
     } catch (error) {
       setSubmitStatus("error")
-      setRecaptchaError("Network error. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -235,45 +194,18 @@ export const ContactSection = () => {
                 />
               </motion.div>
 
-              {isRecaptchaConfigured && siteKey && (
-                <motion.div variants={itemVariants} className="flex justify-center">
-                  <div className="bg-slate-800/30 p-2 rounded-lg backdrop-blur-sm border border-slate-600">
-                    <ReCAPTCHA
-                      sitekey={siteKey}
-                      onChange={onRecaptchaChange}
-                      onError={onRecaptchaError}
-                      onExpired={onRecaptchaExpired}
-                      theme="dark"
-                    />
-                  </div>
-                </motion.div>
-              )}
-
-              {!isRecaptchaConfigured && (
-                <motion.div
-                  variants={itemVariants}
-                  className="flex items-center justify-center text-slate-400 text-sm bg-slate-800/20 p-3 rounded-lg border border-slate-600/30"
-                >
-                  <Shield className="w-4 h-4 mr-2" />
-                  Secure form submission enabled
-                </motion.div>
-              )}
-
-              {recaptchaError && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center justify-center text-amber-400 text-sm bg-amber-400/10 p-3 rounded-lg border border-amber-400/20"
-                >
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  {recaptchaError}
-                </motion.div>
-              )}
+              <motion.div
+                variants={itemVariants}
+                className="flex items-center justify-center text-slate-400 text-sm bg-slate-800/20 p-3 rounded-lg border border-slate-600/30"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Secure form submission enabled
+              </motion.div>
 
               <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
                   type="submit"
-                  disabled={isSubmitting || (isRecaptchaConfigured && !recaptchaToken)}
+                  disabled={isSubmitting}
                   className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 disabled:opacity-50"
                 >
                   {isSubmitting ? (
