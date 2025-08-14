@@ -1,20 +1,14 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Mail, Send, CheckCircle, AlertCircle, Shield } from "lucide-react"
 import { motion } from "framer-motion"
-
-const ReCAPTCHA = dynamic(() => import("react-google-recaptcha"), {
-  ssr: false,
-  loading: () => <div className="h-[78px] bg-slate-800/30 rounded-lg animate-pulse" />,
-})
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -24,6 +18,13 @@ const formSchema = z.object({
 })
 
 type FormData = z.infer<typeof formSchema>
+
+declare global {
+  interface Window {
+    grecaptcha: any
+    onRecaptchaLoad: () => void
+  }
+}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,9 +51,7 @@ const itemVariants = {
 
 const isValidRecaptchaKey = (key: string | undefined): boolean => {
   if (!key || key === "") return false
-  // Check if it's not a placeholder or example key
   if (key.includes("example") || key.includes("placeholder") || key.includes("your-site-key")) return false
-  // Basic format validation for reCAPTCHA keys (they start with specific patterns)
   return key.length >= 40 && /^[A-Za-z0-9_-]+$/.test(key)
 }
 
@@ -61,6 +60,8 @@ export const ContactSection = () => {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const [recaptchaError, setRecaptchaError] = useState<string | null>(null)
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false)
+  const recaptchaRef = useRef<HTMLDivElement>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -75,21 +76,43 @@ export const ContactSection = () => {
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
   const isRecaptchaConfigured = isValidRecaptchaKey(siteKey)
 
-  const onRecaptchaChange = (token: string | null) => {
-    setRecaptchaToken(token)
-    if (token) {
-      setRecaptchaError(null)
+  useEffect(() => {
+    if (!isRecaptchaConfigured) return
+
+    // Load reCAPTCHA script
+    const script = document.createElement("script")
+    script.src = "https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit"
+    script.async = true
+    script.defer = true
+
+    window.onRecaptchaLoad = () => {
+      setRecaptchaLoaded(true)
+      if (window.grecaptcha && recaptchaRef.current) {
+        window.grecaptcha.render(recaptchaRef.current, {
+          sitekey: siteKey,
+          theme: "dark",
+          callback: (token: string) => {
+            setRecaptchaToken(token)
+            setRecaptchaError(null)
+          },
+          "error-callback": () => {
+            setRecaptchaError("reCAPTCHA verification failed. You can still submit the form.")
+          },
+          "expired-callback": () => {
+            setRecaptchaToken(null)
+            setRecaptchaError("reCAPTCHA expired. Please verify again.")
+          },
+        })
+      }
     }
-  }
 
-  const onRecaptchaError = () => {
-    setRecaptchaError("reCAPTCHA verification failed. You can still submit the form.")
-  }
+    document.head.appendChild(script)
 
-  const onRecaptchaExpired = () => {
-    setRecaptchaToken(null)
-    setRecaptchaError("reCAPTCHA expired. Please verify again.")
-  }
+    return () => {
+      document.head.removeChild(script)
+      delete window.onRecaptchaLoad
+    }
+  }, [isRecaptchaConfigured, siteKey])
 
   const onSubmit = async (data: FormData) => {
     if (isRecaptchaConfigured && !recaptchaToken) {
@@ -117,7 +140,8 @@ export const ContactSection = () => {
         setSubmitStatus("success")
         form.reset()
         setRecaptchaToken(null)
-        if (isRecaptchaConfigured && typeof window !== "undefined" && window.grecaptcha) {
+        // Reset reCAPTCHA
+        if (isRecaptchaConfigured && window.grecaptcha) {
           window.grecaptcha.reset()
         }
       } else {
@@ -250,13 +274,13 @@ export const ContactSection = () => {
               {isRecaptchaConfigured && (
                 <motion.div variants={itemVariants} className="flex justify-center">
                   <div className="bg-slate-800/30 p-2 rounded-lg backdrop-blur-sm border border-slate-600">
-                    <ReCAPTCHA
-                      sitekey={siteKey!}
-                      onChange={onRecaptchaChange}
-                      theme="dark"
-                      onError={onRecaptchaError}
-                      onExpired={onRecaptchaExpired}
-                    />
+                    {recaptchaLoaded ? (
+                      <div ref={recaptchaRef} />
+                    ) : (
+                      <div className="h-[78px] bg-slate-800/30 rounded-lg animate-pulse flex items-center justify-center">
+                        <div className="text-slate-400 text-sm">Loading reCAPTCHA...</div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}
