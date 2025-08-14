@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { FloatingParticles } from "@/components/floating-particles"
+import { AdvancedNavbar } from "@/components/advanced-navbar"
 import { HeroSection } from "@/components/hero-section"
 import { ServicesSection } from "@/components/services-section"
 import { ContactSection } from "@/components/contact-section"
@@ -40,6 +41,7 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-slate-100 relative overflow-hidden">
       <FloatingParticles />
+      <AdvancedNavbar />
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -52,6 +54,7 @@ export default function Portfolio() {
 
         {/* Skills Section */}
         <motion.div
+          id="about"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -227,6 +230,7 @@ export default function Portfolio() {
 
         {/* Featured Projects */}
         <motion.div
+          id="projects"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
