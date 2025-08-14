@@ -1,13 +1,24 @@
 "use client"
-
-import type React from "react"
-
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import ReCAPTCHA from "react-google-recaptcha"
 import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Mail, Send, CheckCircle, AlertCircle } from "lucide-react"
+import { Mail, Send, CheckCircle, AlertCircle, Shield } from "lucide-react"
 import { motion } from "framer-motion"
+
+const formSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z.string().min(5, "Subject must be at least 5 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+})
+
+type FormData = z.infer<typeof formSchema>
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -32,29 +43,31 @@ const itemVariants = {
   },
 }
 
-const formFields = [
-  { label: "Name", type: "text", placeholder: "Enter your name", name: "name" },
-  { label: "Email", type: "email", placeholder: "Enter your email", name: "email" },
-  { label: "Subject", type: "text", placeholder: "Enter subject", name: "subject" },
-]
-
 export const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  })
+
+  const onRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (data: FormData) => {
+    if (!recaptchaToken) {
+      setSubmitStatus("error")
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitStatus("idle")
 
@@ -64,12 +77,16 @@ export const ContactSection = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...data,
+          recaptchaToken,
+        }),
       })
 
       if (response.ok) {
         setSubmitStatus("success")
-        setFormData({ name: "", email: "", subject: "", message: "" })
+        form.reset()
+        setRecaptchaToken(null)
       } else {
         setSubmitStatus("error")
       }
@@ -90,92 +107,163 @@ export const ContactSection = () => {
       className="glass-effect rounded-xl p-8"
     >
       <div className="text-emerald-400 mb-6 font-mono">
-        <span className="text-slate-400">$</span> ./contact_me.sh --interactive
+        <span className="text-slate-400">$</span> ./contact_me.sh --secure --interactive
       </div>
 
       <div className="max-w-md mx-auto">
-        <form onSubmit={handleSubmit}>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            {formFields.map((field) => (
-              <motion.div key={field.label} variants={itemVariants}>
-                <label className="text-slate-300 text-sm block mb-2 font-medium">{field.label}:</label>
-                <motion.div whileFocus={{ scale: 1.02 }} className="relative">
-                  <Input
-                    type={field.type}
-                    name={field.name}
-                    value={formData[field.name as keyof typeof formData]}
-                    onChange={handleInputChange}
-                    className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
-                    placeholder={field.placeholder}
-                    required
-                  />
-                </motion.div>
-              </motion.div>
-            ))}
-
-            <motion.div variants={itemVariants}>
-              <label className="text-slate-300 text-sm block mb-2 font-medium">Message:</label>
-              <motion.div whileFocus={{ scale: 1.02 }}>
-                <Textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm min-h-[120px]"
-                  placeholder="Enter your message"
-                  required
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-slate-300 text-sm font-medium">Name:</FormLabel>
+                      <FormControl>
+                        <motion.div whileFocus={{ scale: 1.02 }}>
+                          <Input
+                            {...field}
+                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            placeholder="Enter your name"
+                          />
+                        </motion.div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
                 />
               </motion.div>
-            </motion.div>
 
-            <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 disabled:opacity-50"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    Send Message
-                  </>
-                )}
-              </Button>
-            </motion.div>
-
-            {submitStatus === "success" && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-center text-emerald-400 text-sm"
-              >
-                <CheckCircle className="w-4 h-4 mr-2" />
-                Message sent successfully!
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-slate-300 text-sm font-medium">Email:</FormLabel>
+                      <FormControl>
+                        <motion.div whileFocus={{ scale: 1.02 }}>
+                          <Input
+                            {...field}
+                            type="email"
+                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            placeholder="Enter your email"
+                          />
+                        </motion.div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
+                />
               </motion.div>
-            )}
 
-            {submitStatus === "error" && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-center text-red-400 text-sm"
-              >
-                <AlertCircle className="w-4 h-4 mr-2" />
-                Failed to send message. Please try again.
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-slate-300 text-sm font-medium">Subject:</FormLabel>
+                      <FormControl>
+                        <motion.div whileFocus={{ scale: 1.02 }}>
+                          <Input
+                            {...field}
+                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            placeholder="Enter subject"
+                          />
+                        </motion.div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
+                />
               </motion.div>
-            )}
-          </motion.div>
-        </form>
+
+              <motion.div variants={itemVariants}>
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-slate-300 text-sm font-medium">Message:</FormLabel>
+                      <FormControl>
+                        <motion.div whileFocus={{ scale: 1.02 }}>
+                          <Textarea
+                            {...field}
+                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm min-h-[120px]"
+                            placeholder="Enter your message"
+                          />
+                        </motion.div>
+                      </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
+                    </FormItem>
+                  )}
+                />
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="flex justify-center">
+                <div className="bg-slate-800/30 p-2 rounded-lg backdrop-blur-sm border border-slate-600">
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                    onChange={onRecaptchaChange}
+                    theme="dark"
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || !recaptchaToken}
+                  className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 mr-2 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 mr-2" />
+                      Send Secure Message
+                      <Shield className="w-4 h-4 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </motion.div>
+
+              {submitStatus === "success" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-center text-emerald-400 text-sm"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Message sent successfully!
+                </motion.div>
+              )}
+
+              {submitStatus === "error" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-center text-red-400 text-sm"
+                >
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Failed to send message. Please verify reCAPTCHA and try again.
+                </motion.div>
+              )}
+            </motion.div>
+          </form>
+        </Form>
 
         <motion.div
           initial={{ opacity: 0 }}

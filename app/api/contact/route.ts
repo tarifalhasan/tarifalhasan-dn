@@ -1,27 +1,43 @@
 import { type NextRequest, NextResponse } from "next/server"
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+// Verify reCAPTCHA token
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  try {
+    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${token}`,
+    })
+
+    const data = await response.json()
+    return data.success
+  } catch (error) {
+    console.error("reCAPTCHA verification error:", error)
+    return false
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, subject, message } = await request.json()
+    const { name, email, subject, message, recaptchaToken } = await request.json()
 
     // Validate required fields
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 })
+    if (!name || !email || !subject || !message || !recaptchaToken) {
+      return NextResponse.json({ error: "All fields and reCAPTCHA verification are required" }, { status: 400 })
     }
 
-    // Create transporter (configure with your email service)
-    const transporter = nodemailer.createTransporter({
-      host: process.env.SMTP_HOST || "smtp.gmail.com",
-      port: Number.parseInt(process.env.SMTP_PORT || "587"),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    })
+    // Verify reCAPTCHA
+    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+    if (!isRecaptchaValid) {
+      return NextResponse.json({ error: "reCAPTCHA verification failed" }, { status: 400 })
+    }
 
-    // Custom email template
+    // Custom email template for Resend
     const htmlTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -37,17 +53,18 @@ export async function POST(request: NextRequest) {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f8fafc;
+            background-color: #0f172a;
           }
           .container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             border-radius: 12px;
             padding: 2px;
           }
           .content {
-            background: white;
+            background: #1e293b;
             border-radius: 10px;
             padding: 30px;
+            color: #e2e8f0;
           }
           .header {
             text-align: center;
@@ -56,7 +73,7 @@ export async function POST(request: NextRequest) {
           .logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             border-radius: 12px;
             display: inline-flex;
             align-items: center;
@@ -64,39 +81,39 @@ export async function POST(request: NextRequest) {
             margin-bottom: 15px;
           }
           .title {
-            color: #1e293b;
+            color: #f1f5f9;
             font-size: 24px;
             font-weight: bold;
             margin: 0;
           }
           .subtitle {
-            color: #64748b;
+            color: #94a3b8;
             font-size: 16px;
             margin: 5px 0 0 0;
           }
           .field {
             margin-bottom: 20px;
             padding: 15px;
-            background: #f1f5f9;
+            background: #334155;
             border-radius: 8px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #10b981;
           }
           .field-label {
             font-weight: bold;
-            color: #475569;
+            color: #94a3b8;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 5px;
           }
           .field-value {
-            color: #1e293b;
+            color: #f1f5f9;
             font-size: 16px;
             word-wrap: break-word;
           }
           .message-field {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #475569;
+            border: 1px solid #64748b;
             border-radius: 8px;
             padding: 20px;
             margin-top: 20px;
@@ -105,8 +122,8 @@ export async function POST(request: NextRequest) {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            color: #64748b;
+            border-top: 1px solid #475569;
+            color: #94a3b8;
             font-size: 14px;
           }
           .ai-badge {
@@ -119,6 +136,16 @@ export async function POST(request: NextRequest) {
             font-weight: bold;
             margin-left: 10px;
           }
+          .security-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+          }
         </style>
       </head>
       <body>
@@ -128,11 +155,11 @@ export async function POST(request: NextRequest) {
               <div class="logo">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M9.5 2A7.5 7.5 0 0 0 4 10.5V14a7.5 7.5 0 0 0 7.5 7.5h1A7.5 7.5 0 0 0 20 14v-3.5A7.5 7.5 0 0 0 12.5 3h-3Z" fill="white"/>
-                  <path d="M8 10.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM13 10.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" fill="#667eea"/>
+                  <path d="M8 10.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM13 10.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" fill="#4f46e5"/>
                 </svg>
               </div>
               <h1 class="title">New Contact Form Submission</h1>
-              <p class="subtitle">From Tarif AI Portfolio <span class="ai-badge">AI-POWERED</span></p>
+              <p class="subtitle">From Tarif AI Portfolio <span class="ai-badge">AI-POWERED</span><span class="security-badge">SECURE</span></p>
             </div>
 
             <div class="field">
@@ -157,6 +184,7 @@ export async function POST(request: NextRequest) {
 
             <div class="footer">
               <p>This message was sent from your AI-powered portfolio contact form.</p>
+              <p>✅ reCAPTCHA verified • 🔒 Secure transmission</p>
               <p>Timestamp: ${new Date().toLocaleString()}</p>
             </div>
           </div>
@@ -165,16 +193,21 @@ export async function POST(request: NextRequest) {
       </html>
     `
 
-    // Send email
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+    // Send email using Resend
+    const { data, error } = await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || "contact@yourdomain.com",
+      to: process.env.CONTACT_EMAIL || "your-email@example.com",
       subject: `Portfolio Contact: ${subject}`,
       html: htmlTemplate,
       replyTo: email,
     })
 
-    return NextResponse.json({ message: "Email sent successfully" })
+    if (error) {
+      console.error("Resend error:", error)
+      return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
+    }
+
+    return NextResponse.json({ message: "Email sent successfully", id: data?.id })
   } catch (error) {
     console.error("Error sending email:", error)
     return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
