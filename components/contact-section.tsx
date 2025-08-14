@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -18,6 +18,15 @@ const formSchema = z.object({
 })
 
 type FormData = z.infer<typeof formSchema>
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (callback: () => void) => void
+      execute: (siteKey: string, options: { action: string }) => Promise<string>
+    }
+  }
+}
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -45,6 +54,7 @@ const itemVariants = {
 export const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+  const [isRecaptchaLoaded, setIsRecaptchaLoaded] = useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -56,11 +66,45 @@ export const ContactSection = () => {
     },
   })
 
+  useEffect(() => {
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+    if (!siteKey) return
+
+    const script = document.createElement("script")
+    script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+    script.async = true
+    script.defer = true
+    script.onload = () => {
+      window.grecaptcha.ready(() => {
+        setIsRecaptchaLoaded(true)
+      })
+    }
+    document.head.appendChild(script)
+
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [])
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true)
     setSubmitStatus("idle")
 
     try {
+      let recaptchaToken = "not-available"
+
+      // Generate reCAPTCHA token if available
+      if (isRecaptchaLoaded && window.grecaptcha) {
+        const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+        if (siteKey) {
+          try {
+            recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "contact_form" })
+          } catch (error) {
+            console.warn("reCAPTCHA execution failed:", error)
+          }
+        }
+      }
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -68,7 +112,7 @@ export const ContactSection = () => {
         },
         body: JSON.stringify({
           ...data,
-          recaptchaToken: "not-available", // Added recaptchaToken field that API expects
+          recaptchaToken,
         }),
       })
 
@@ -202,7 +246,7 @@ export const ContactSection = () => {
                 className="flex items-center justify-center text-slate-400 text-sm bg-slate-800/20 p-3 rounded-lg border border-slate-600/30"
               >
                 <Shield className="w-4 h-4 mr-2" />
-                Secure form submission enabled
+                {isRecaptchaLoaded ? "reCAPTCHA v3 Protected" : "Secure form submission enabled"}
               </motion.div>
 
               <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
