@@ -87,6 +87,7 @@ export const ContactSection = () => {
         setSubmitStatus("success")
         form.reset()
         setRecaptchaToken(null)
+        window.grecaptcha?.reset()
       } else {
         setSubmitStatus("error")
       }
@@ -212,9 +213,11 @@ export const ContactSection = () => {
               <motion.div variants={itemVariants} className="flex justify-center">
                 <div className="bg-slate-800/30 p-2 rounded-lg backdrop-blur-sm border border-slate-600">
                   <ReCAPTCHA
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
                     onChange={onRecaptchaChange}
                     theme="dark"
+                    onError={() => setSubmitStatus("error")}
+                    onExpired={() => setRecaptchaToken(null)}
                   />
                 </div>
               </motion.div>
