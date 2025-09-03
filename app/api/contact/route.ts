@@ -1,94 +1,75 @@
-<<<<<<< HEAD
-import { sendFormToEmail } from '@/actions/email'
-import { NextResponse } from 'next/server'
-=======
-import { type NextRequest, NextResponse } from "next/server"
-import { Resend } from "resend"
+import { type NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function verifyRecaptcha(token: string) {
   if (token === "not-available") {
-    return { success: true, score: 1.0 }
+    return { success: true, score: 1.0 };
   }
 
   try {
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
     if (!secretKey) {
-      throw new Error("reCAPTCHA secret key is not configured")
+      throw new Error("reCAPTCHA secret key is not configured");
     }
 
-    const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `secret=${secretKey}&response=${token}`,
-    })
+    const response = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${secretKey}&response=${token}`,
+      }
+    );
 
-    const data = await response.json()
+    const data = await response.json();
 
     // Check if the verification was successful (v3 uses score-based verification)
     if (data.success && data.score >= 0.5) {
-      return { success: true, score: data.score }
+      return { success: true, score: data.score };
     } else {
       return {
         success: false,
         error: "reCAPTCHA verification failed",
         score: data.score || 0,
-      }
+      };
     }
   } catch (error) {
-    console.error("reCAPTCHA verification error:", error)
-    return { success: false, error: "Failed to verify reCAPTCHA" }
+    console.error("reCAPTCHA verification error:", error);
+    return { success: false, error: "Failed to verify reCAPTCHA" };
   }
 }
->>>>>>> c6dbe95b833a3428a5ee42ebfb76e0fe8da13ca9
 
-// Function to verify reCAPTCHA token
-async function verifyRecaptcha(token: string) {
+export async function POST(request: NextRequest) {
   try {
-<<<<<<< HEAD
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY
-=======
-    const { name, email, subject, message, recaptchaToken } = await request.json()
->>>>>>> c6dbe95b833a3428a5ee42ebfb76e0fe8da13ca9
+    const { name, email, subject, message, recaptchaToken } =
+      await request.json();
 
-    if (!secretKey) {
-      throw new Error('reCAPTCHA secret key is not configured')
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+      return NextResponse.json(
+        { error: "All fields are required" },
+        { status: 400 }
+      );
     }
 
-<<<<<<< HEAD
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `secret=${secretKey}&response=${token}`,
-    })
-
-    const data = await response.json()
-
-    // Check if the verification was successful
-    if (data.success && data.score >= 0.5) {
-      return { success: true, score: data.score }
-    } else {
-      return {
-        success: false,
-        error: 'reCAPTCHA verification failed',
-        score: data.score || 0,
-      }
-    }
-=======
-    const isRecaptchaConfigured = process.env.RECAPTCHA_SECRET_KEY && process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+    const isRecaptchaConfigured =
+      process.env.RECAPTCHA_SECRET_KEY &&
+      process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
     if (isRecaptchaConfigured && !recaptchaToken) {
-      return NextResponse.json({ error: "reCAPTCHA verification required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification required" },
+        { status: 400 }
+      );
     }
 
     if (recaptchaToken && recaptchaToken !== "not-available") {
-      const recaptchaResult = await verifyRecaptcha(recaptchaToken)
+      const recaptchaResult = await verifyRecaptcha(recaptchaToken);
       if (!recaptchaResult.success) {
         return NextResponse.json(
           {
@@ -96,8 +77,8 @@ async function verifyRecaptcha(token: string) {
             details: recaptchaResult.error,
             score: recaptchaResult.score,
           },
-          { status: 400 },
-        )
+          { status: 400 }
+        );
       }
     }
 
@@ -288,7 +269,9 @@ async function verifyRecaptcha(token: string) {
 
             <div class="footer">
               <p><strong>Sent via AI-Enhanced Contact System</strong></p>
-              <p>This message was securely transmitted${isRecaptchaConfigured ? " through reCAPTCHA verification" : ""}</p>
+              <p>This message was securely transmitted${
+                isRecaptchaConfigured ? " through reCAPTCHA verification" : ""
+              }</p>
               <div class="timestamp">
                 📅 ${new Date().toLocaleString("en-US", {
                   weekday: "long",
@@ -305,7 +288,7 @@ async function verifyRecaptcha(token: string) {
         </div>
       </body>
       </html>
-    `
+    `;
 
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "contact@yourdomain.com",
@@ -313,76 +296,25 @@ async function verifyRecaptcha(token: string) {
       subject: `🤖 AI Portfolio Contact: ${subject}`,
       html: htmlTemplate,
       replyTo: email,
-    })
+    });
 
     if (error) {
-      console.error("Resend error:", error)
-      return NextResponse.json({ error: "Failed to send email" }, { status: 500 })
+      console.error("Resend error:", error);
+      return NextResponse.json(
+        { error: "Failed to send email" },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
       message: "Email sent successfully",
       id: data?.id,
-    })
->>>>>>> c6dbe95b833a3428a5ee42ebfb76e0fe8da13ca9
+    });
   } catch (error) {
-    console.error('reCAPTCHA verification error:', error)
-    return { success: false, error: 'Failed to verify reCAPTCHA' }
-  }
-}
-
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const { form, submissionData, recaptchaToken } = body
-
-    // Verify reCAPTCHA token
-    if (!recaptchaToken) {
-      return NextResponse.json(
-        {
-          success: false,
-          errors: [{ message: 'reCAPTCHA token is missing' }],
-        },
-        { status: 400 },
-      )
-    }
-
-    const recaptchaResult = await verifyRecaptcha(recaptchaToken)
-
-    if (!recaptchaResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          errors: [
-            {
-              message: 'Security check failed. Please try again.',
-              details: recaptchaResult.error,
-              score: recaptchaResult.score,
-            },
-          ],
-        },
-        { status: 400 },
-      )
-    }
-
-    // Process the form submission as you normally would
-    // This is where you'd save to your Payload CMS database
-
-    // Also send the form data to email
-    await sendFormToEmail(submissionData, form)
-
-    return NextResponse.json({
-      success: true,
-      message: 'Form submitted successfully',
-    })
-  } catch (error) {
-    console.error('Form submission error:', error)
+    console.error("Error sending email:", error);
     return NextResponse.json(
-      {
-        success: false,
-        errors: [{ message: 'Failed to process form submission' }],
-      },
-      { status: 500 },
-    )
+      { error: "Failed to send email" },
+      { status: 500 }
+    );
   }
 }
