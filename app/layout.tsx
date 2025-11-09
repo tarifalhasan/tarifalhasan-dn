@@ -1,14 +1,15 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { DM_Sans } from "next/font/google"
-import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider";
+import "@/styles/globals.css";
+import type { Metadata } from "next";
+import { DM_Sans } from "next/font/google";
+import type React from "react";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-dm-sans",
   weight: ["400", "500", "600", "700"],
-})
+});
 
 export const metadata: Metadata = {
   title: {
@@ -71,7 +72,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Tarif Al Hasan - Full-Stack Developer & AI Specialist",
-    description: "Experienced full-stack developer specializing in React, Next.js, Node.js, and AI integration.",
+    description:
+      "Experienced full-stack developer specializing in React, Next.js, Node.js, and AI integration.",
     images: ["/tarif-portrait.jpg"],
     creator: "@tarifalhasan",
   },
@@ -92,8 +94,8 @@ export const metadata: Metadata = {
     yahoo: "your-yahoo-verification-code",
   },
   category: "technology",
-    generator: 'v0.app'
-}
+  generator: "v0.app",
+};
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -134,26 +136,56 @@ const jsonLd = {
   ],
   description:
     "Experienced full-stack developer specializing in React, Next.js, Node.js, and AI integration. Creating scalable web applications with modern technologies and best practices.",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${dmSans.variable} antialiased`}
+      suppressHydrationWarning
+    >
       <head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0f172a" />
         <meta name="msapplication-TileColor" content="#0f172a" />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
-  )
+  );
 }

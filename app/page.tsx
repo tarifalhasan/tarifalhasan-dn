@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { FloatingParticles } from "@/components/floating-particles"
-import { AdvancedNavbar } from "@/components/advanced-navbar"
-import { HeroSection } from "@/components/hero-section"
-import { ServicesSection } from "@/components/services-section"
-import { ContactSection } from "@/components/contact-section"
-import { Button } from "@/components/ui/button"
-import { BlogModal } from "@/components/blog-modal"
-import { blogPosts, type BlogPost } from "@/data/blog-posts"
+import { AdvancedNavbar } from "@/components/advanced-navbar";
+import { BlogModal } from "@/components/blog-modal";
+import { ContactSection } from "@/components/contact-section";
+import { FloatingParticles } from "@/components/floating-particles";
+import { HeroSection } from "@/components/hero-section";
+import { ServicesSection } from "@/components/services-section";
+import { Button } from "@/components/ui/button";
+import { blogPosts, type BlogPost } from "@/data/blog-posts";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,7 +20,7 @@ const containerVariants = {
       delayChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -32,24 +32,26 @@ const itemVariants = {
       ease: "easeOut",
     },
   },
-}
+};
 
 export default function Portfolio() {
-  const { scrollYProgress } = useScroll()
-  const y = useTransform(scrollYProgress, [0, 1], [0, -50])
-  const [activeSection, setActiveSection] = useState("hero")
-  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null)
-  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false)
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const [activeSection, setActiveSection] = useState("hero");
+  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(
+    null
+  );
+  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
 
   const openBlogModal = (post: BlogPost) => {
-    setSelectedBlogPost(post)
-    setIsBlogModalOpen(true)
-  }
+    setSelectedBlogPost(post);
+    setIsBlogModalOpen(true);
+  };
 
   const closeBlogModal = () => {
-    setIsBlogModalOpen(false)
-    setSelectedBlogPost(null)
-  }
+    setIsBlogModalOpen(false);
+    setSelectedBlogPost(null);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-slate-100 relative overflow-hidden">
@@ -155,7 +157,11 @@ export default function Portfolio() {
                     >
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                        transition={{
+                          duration: 2,
+                          repeat: Number.POSITIVE_INFINITY,
+                          ease: "linear",
+                        }}
                         className="w-2 h-2 bg-emerald-400 rounded-full"
                       />
                       {expertise}
@@ -176,7 +182,8 @@ export default function Portfolio() {
           className="glass-effect rounded-xl p-8 mb-12"
         >
           <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> ./development-process.sh --show-workflow
+            <span className="text-slate-400">$</span> ./development-process.sh
+            --show-workflow
           </div>
 
           <motion.div
@@ -190,25 +197,29 @@ export default function Portfolio() {
               {
                 step: "01",
                 title: "Discovery & Planning",
-                description: "Understanding requirements, user research, and technical architecture planning.",
+                description:
+                  "Understanding requirements, user research, and technical architecture planning.",
                 icon: "🔍",
               },
               {
                 step: "02",
                 title: "Design & Prototyping",
-                description: "UI/UX design, wireframing, and interactive prototypes for validation.",
+                description:
+                  "UI/UX design, wireframing, and interactive prototypes for validation.",
                 icon: "🎨",
               },
               {
                 step: "03",
                 title: "Development & Testing",
-                description: "Agile development with continuous testing, code reviews, and quality assurance.",
+                description:
+                  "Agile development with continuous testing, code reviews, and quality assurance.",
                 icon: "⚡",
               },
               {
                 step: "04",
                 title: "Deployment & Support",
-                description: "Production deployment, monitoring, maintenance, and ongoing support.",
+                description:
+                  "Production deployment, monitoring, maintenance, and ongoing support.",
                 icon: "🚀",
               },
             ].map((process, index) => (
@@ -227,7 +238,11 @@ export default function Portfolio() {
                   <motion.div
                     className="absolute -top-2 -right-2 text-2xl"
                     animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: index * 0.5 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      delay: index * 0.5,
+                    }}
                   >
                     {process.icon}
                   </motion.div>
@@ -235,7 +250,9 @@ export default function Portfolio() {
                 <h3 className="text-lg font-semibold text-indigo-300 mb-2 group-hover:text-indigo-200 transition-colors">
                   {process.title}
                 </h3>
-                <p className="text-slate-300 text-sm leading-relaxed">{process.description}</p>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  {process.description}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -251,7 +268,8 @@ export default function Portfolio() {
           className="glass-effect rounded-xl p-8 mb-12"
         >
           <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> ls projects/ --featured --detailed
+            <span className="text-slate-400">$</span> ls projects/ --featured
+            --detailed
           </div>
 
           <motion.div
@@ -331,9 +349,13 @@ export default function Portfolio() {
                   <h3 className="text-lg font-semibold text-indigo-300 group-hover:text-indigo-200 transition-colors">
                     {project.title}
                   </h3>
-                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">{project.category}</span>
+                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">
+                    {project.category}
+                  </span>
                 </div>
-                <p className="text-slate-300 text-sm mb-4 leading-relaxed">{project.description}</p>
+                <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                  {project.description}
+                </p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tech.map((tech) => (
                     <motion.span
@@ -346,7 +368,10 @@ export default function Portfolio() {
                   ))}
                 </div>
                 <div className="flex gap-3">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Button
                       size="sm"
                       variant="outline"
@@ -356,7 +381,10 @@ export default function Portfolio() {
                       Demo
                     </Button>
                   </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Button
                       size="sm"
                       variant="outline"
@@ -375,7 +403,8 @@ export default function Portfolio() {
         {/* Blog & Articles */}
         <div className="glass-effect rounded-xl p-8 mb-12">
           <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> find ./blog -name "*.md" | head -3
+            <span className="text-slate-400">$</span> find ./blog -name "*.md" |
+            head -3
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -387,12 +416,16 @@ export default function Portfolio() {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-lg">📖</span>
-                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">{article.category}</span>
+                  <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">
+                    {article.category}
+                  </span>
                 </div>
                 <h3 className="text-lg font-semibold text-indigo-300 mb-3 group-hover:text-indigo-200 transition-colors">
                   {article.title}
                 </h3>
-                <p className="text-slate-300 text-sm mb-4 leading-relaxed">{article.excerpt}</p>
+                <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                  {article.excerpt}
+                </p>
                 <div className="flex justify-between items-center text-xs text-slate-400">
                   <div className="flex items-center gap-2">
                     <span>📅</span>
@@ -417,7 +450,8 @@ export default function Portfolio() {
           className="glass-effect rounded-xl p-8 mb-12"
         >
           <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> grep -r "testimonials" ./client-feedback/
+            <span className="text-slate-400">$</span> grep -r "testimonials"
+            ./client-feedback/
           </div>
 
           <motion.div
@@ -464,7 +498,9 @@ export default function Portfolio() {
                     {testimonial.avatar}
                   </div>
                   <div>
-                    <h4 className="text-indigo-300 font-semibold">{testimonial.name}</h4>
+                    <h4 className="text-indigo-300 font-semibold">
+                      {testimonial.name}
+                    </h4>
                     <p className="text-slate-400 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
@@ -482,7 +518,9 @@ export default function Portfolio() {
                     </motion.div>
                   ))}
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed">{testimonial.content}</p>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  {testimonial.content}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -497,7 +535,8 @@ export default function Portfolio() {
           className="glass-effect rounded-xl p-8 mb-12"
         >
           <div className="text-emerald-400 mb-6 font-mono">
-            <span className="text-slate-400">$</span> cat achievements.json | jq '.certifications[]'
+            <span className="text-slate-400">$</span> cat achievements.json | jq
+            '.certifications[]'
           </div>
 
           <motion.div
@@ -542,14 +581,20 @@ export default function Portfolio() {
                 <motion.div
                   className="text-4xl mb-3"
                   animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: index * 0.5 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    delay: index * 0.5,
+                  }}
                 >
                   {achievement.icon}
                 </motion.div>
                 <h3 className="text-lg font-semibold text-indigo-300 mb-1 group-hover:text-indigo-200 transition-colors">
                   {achievement.title}
                 </h3>
-                <p className="text-slate-300 text-sm mb-2">{achievement.subtitle}</p>
+                <p className="text-slate-300 text-sm mb-2">
+                  {achievement.subtitle}
+                </p>
                 <div className="flex items-center justify-center gap-1 text-xs text-slate-400">
                   <span>🏆</span>
                   {achievement.year}
@@ -563,7 +608,11 @@ export default function Portfolio() {
       </motion.div>
 
       {/* BlogModal component */}
-      <BlogModal isOpen={isBlogModalOpen} onClose={closeBlogModal} post={selectedBlogPost} />
+      <BlogModal
+        isOpen={isBlogModalOpen}
+        onClose={closeBlogModal}
+        post={selectedBlogPost}
+      />
     </div>
-  )
+  );
 }
