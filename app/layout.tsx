@@ -90,9 +90,8 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
-    yahoo: "your-yahoo-verification-code",
+    google:
+      "google-site-verification=-jR1PtI8nJMvVSwQEwAM0pxs5RSz4Kyr1hYhR0RID7U",
   },
   category: "technology",
   generator: "v0.app",
