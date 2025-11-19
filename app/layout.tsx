@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
@@ -172,7 +173,7 @@ export default function RootLayout({
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <link rel="manifest" href="/site.webmanifest" />
+        {/* <link rel="manifest" href="/site.webmanifest" /> */}
         <meta name="theme-color" content="#0f172a" />
         <meta name="msapplication-TileColor" content="#0f172a" />
       </head>
@@ -185,6 +186,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <ScrollProgress className="top-[0]" />
       </body>
     </html>
   );

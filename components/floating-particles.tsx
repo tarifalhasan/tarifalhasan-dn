@@ -8,7 +8,7 @@ export const FloatingParticles = () => {
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-indigo-400 rounded-full opacity-30"
+          className="absolute w-1 h-1 rounded-full opacity-40 bg-cyan-200 dark:bg-cyan-300"
           animate={{
             x: [0, Math.random() * 100 - 50],
             y: [0, Math.random() * 100 - 50],

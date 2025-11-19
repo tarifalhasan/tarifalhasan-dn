@@ -105,44 +105,31 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
   if (!isOpen) return null
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={onClose}>
       <div
-        className={`bg-slate-900/95 border border-slate-700/50 rounded-2xl shadow-2xl backdrop-blur-xl w-full max-w-lg mx-auto ${
+        className={`bg-white/90 dark:bg-slate-950/90 border border-white/40 dark:border-white/10 rounded-2xl shadow-[0_35px_120px_rgba(6,10,35,0.65)] backdrop-blur-2xl w-full max-w-lg mx-auto ${
           isMinimized ? "h-16" : "h-[650px]"
         } flex flex-col overflow-hidden`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-5 border-b border-slate-700/50 bg-gradient-to-r from-slate-800/80 to-slate-900/80">
+        <div className="flex items-center justify-between p-5 border-b border-white/30 dark:border-white/5 bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] text-white">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center shadow-lg">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h3 className="text-base font-semibold text-slate-100">Tarif AI Assistant</h3>
-              <p className="text-xs text-emerald-400 flex items-center">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
+              <h3 className="text-base font-semibold">Tarif AI Assistant</h3>
+              <p className="text-xs text-teal-200 flex items-center">
+                <div className="w-2 h-2 bg-teal-200 rounded-full mr-2 animate-pulse"></div>
                 LangChain Powered • Online
               </p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMinimized(!isMinimized)}
-              className="text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 p-2 h-9 w-9 rounded-lg transition-all duration-200"
-            >
+            <Button variant="ghost" size="sm" onClick={() => setIsMinimized(!isMinimized)} className="text-white/80 hover:text-white hover:bg-white/20 p-2 h-9 w-9 rounded-lg transition-all duration-200">
               {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="text-slate-400 hover:text-red-400 hover:bg-red-500/10 p-2 h-9 w-9 rounded-lg transition-all duration-200"
-            >
+            <Button variant="ghost" size="sm" onClick={onClose} className="text-white/80 hover:text-white hover:bg-white/20 p-2 h-9 w-9 rounded-lg transition-all duration-200">
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -150,27 +137,27 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
 
         {!isMinimized && (
           <>
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-gradient-to-b from-slate-900/50 to-slate-900/80">
+            <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-gradient-to-b from-white/50 via-white/30 to-white/10 dark:from-slate-950/40 dark:to-slate-950/80">
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                   <div className={`flex items-start space-x-3 max-w-[85%]`}>
                     {message.sender === "ai" && (
-                      <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#7c3aed] via-[#a855f7] to-[#22d3ee] rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
                     )}
                     <div
                       className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                         message.sender === "user"
-                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-                          : "bg-slate-800/80 text-slate-200 border border-slate-700/50 shadow-md backdrop-blur-sm"
+                          ? "bg-gradient-to-r from-[#4f46e5] via-[#7c3aed] to-[#22d3ee] text-white shadow-lg"
+                          : "bg-white/80 dark:bg-white/5 text-slate-800 dark:text-slate-100 border border-white/40 dark:border-white/10 shadow-md backdrop-blur-sm"
                       }`}
                     >
                       {message.text}
                     </div>
                     {message.sender === "user" && (
-                      <div className="w-8 h-8 bg-slate-700 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
-                        <User className="w-4 h-4 text-slate-300" />
+                      <div className="w-8 h-8 bg-white/80 dark:bg-slate-800 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-md">
+                        <User className="w-4 h-4 text-slate-600 dark:text-slate-200" />
                       </div>
                     )}
                   </div>
@@ -180,22 +167,16 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#7c3aed] via-[#a855f7] to-[#22d3ee] rounded-xl flex items-center justify-center flex-shrink-0 mt-1 shadow-lg">
                       <Bot className="w-4 h-4 text-white" />
                     </div>
-                    <div className="bg-slate-800/80 border border-slate-700/50 px-4 py-3 rounded-2xl shadow-md backdrop-blur-sm">
+                      <div className="bg-white/80 dark:bg-white/5 border border-white/40 dark:border-white/10 px-4 py-3 rounded-2xl shadow-md backdrop-blur-sm">
                       <div className="flex items-center space-x-1">
-                        <span className="text-xs text-slate-400 mr-2">AI is processing</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-300 mr-2">AI is processing</span>
                         <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
-                          <div
-                            className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.1s" }}
-                          ></div>
-                          <div
-                            className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
-                            style={{ animationDelay: "0.2s" }}
-                          ></div>
+                            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+                            <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
                         </div>
                       </div>
                     </div>
@@ -205,20 +186,20 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="p-5 border-t border-slate-700/50 bg-gradient-to-r from-slate-800/80 to-slate-900/80 backdrop-blur-sm">
+            <div className="p-5 border-t border-white/30 dark:border-white/5 bg-gradient-to-r from-white/80 to-white/50 dark:from-slate-950/50 dark:to-slate-950/80 backdrop-blur-sm">
               <div className="flex space-x-3">
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask about Tarif's expertise, projects, or experience..."
-                  className="flex-1 bg-slate-800/80 border-slate-600/50 text-slate-200 placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl h-12 px-4 backdrop-blur-sm transition-all duration-200"
+                  className="flex-1 bg-white/80 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-violet-400 focus:ring-2 focus:ring-violet-400/20 rounded-xl h-12 px-4 backdrop-blur-sm transition-all duration-200"
                   disabled={isTyping}
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isTyping}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0 h-12 px-4 rounded-xl shadow-lg transition-all duration-200 disabled:opacity-50"
+                  className="bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] hover:from-[#6d28d9] hover:via-[#9333ea] hover:to-[#0ea5e9] text-white border-0 h-12 px-4 rounded-xl shadow-lg transition-all duration-200 disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

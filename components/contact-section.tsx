@@ -203,9 +203,7 @@ export const ContactSection = () => {
       viewport={{ once: true }}
       className="glass-effect rounded-xl p-8"
     >
-      <div className="text-emerald-400 mb-6 font-mono">
-        <span className="text-slate-400">$</span> ./contact_me.sh --secure --interactive
-      </div>
+      <div className="section-eyebrow mb-6">Start A Project</div>
 
       <div className="max-w-md mx-auto">
         <Form {...form}>
@@ -223,12 +221,14 @@ export const ContactSection = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-sm font-medium">Name:</FormLabel>
+                      <FormLabel className="text-slate-800 dark:text-slate-300 text-sm font-medium">
+                        Name:
+                      </FormLabel>
                       <FormControl>
                         <motion.div whileFocus={{ scale: 1.02 }}>
                           <Input
                             {...field}
-                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            className="bg-white/80 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400/30"
                             placeholder="Enter your name"
                           />
                         </motion.div>
@@ -245,13 +245,15 @@ export const ContactSection = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-sm font-medium">Email:</FormLabel>
+                      <FormLabel className="text-slate-800 dark:text-slate-300 text-sm font-medium">
+                        Email:
+                      </FormLabel>
                       <FormControl>
                         <motion.div whileFocus={{ scale: 1.02 }}>
                           <Input
                             {...field}
                             type="email"
-                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            className="bg-white/80 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400/30"
                             placeholder="Enter your email"
                           />
                         </motion.div>
@@ -268,12 +270,14 @@ export const ContactSection = () => {
                   name="subject"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-sm font-medium">Subject:</FormLabel>
+                      <FormLabel className="text-slate-800 dark:text-slate-300 text-sm font-medium">
+                        Subject:
+                      </FormLabel>
                       <FormControl>
                         <motion.div whileFocus={{ scale: 1.02 }}>
                           <Input
                             {...field}
-                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm"
+                            className="bg-white/80 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400/30"
                             placeholder="Enter subject"
                           />
                         </motion.div>
@@ -290,12 +294,14 @@ export const ContactSection = () => {
                   name="message"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-300 text-sm font-medium">Message:</FormLabel>
+                      <FormLabel className="text-slate-800 dark:text-slate-300 text-sm font-medium">
+                        Message:
+                      </FormLabel>
                       <FormControl>
                         <motion.div whileFocus={{ scale: 1.02 }}>
                           <Textarea
                             {...field}
-                            className="bg-slate-800/50 border-slate-600 text-slate-100 focus:border-indigo-400 focus:ring-indigo-400/20 backdrop-blur-sm min-h-[120px]"
+                            className="bg-white/80 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-violet-400 focus:ring-violet-400/30 min-h-[120px]"
                             placeholder="Enter your message"
                           />
                         </motion.div>
@@ -308,7 +314,7 @@ export const ContactSection = () => {
 
               <motion.div
                 variants={itemVariants}
-                className="flex items-center justify-center text-slate-400 text-sm bg-slate-800/20 p-3 rounded-lg border border-slate-600/30"
+                className="flex items-center justify-center text-slate-600 dark:text-slate-300 text-sm bg-white/70 dark:bg-white/10 p-3 rounded-lg border border-slate-200/60 dark:border-white/10"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 {isRecaptchaLoaded ? "reCAPTCHA v3 Protected" : "Secure form submission enabled"}
@@ -318,7 +324,7 @@ export const ContactSection = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 disabled:opacity-50"
+                  className="w-full bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] hover:from-[#6d28d9] hover:via-[#9333ea] hover:to-[#0ea5e9] text-white py-3 disabled:opacity-50 shadow-lg shadow-[#7c3aed]/30"
                 >
                   {isSubmitting ? (
                     <>
@@ -339,7 +345,7 @@ export const ContactSection = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center justify-center text-emerald-400 text-sm"
+                  className="flex items-center justify-center text-teal-600 dark:text-emerald-300 text-sm"
                 >
                   <CheckCircle className="w-4 h-4 mr-2" />
                   Message sent successfully!
@@ -365,7 +371,7 @@ export const ContactSection = () => {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
           viewport={{ once: true }}
-          className="text-center mt-8 space-y-2 text-slate-400 text-sm"
+          className="text-center mt-8 space-y-2 text-slate-600 dark:text-slate-400 text-sm"
         >
           <div className="flex items-center justify-center gap-2">
             <Mail className="w-4 h-4" />

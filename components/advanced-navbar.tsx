@@ -1,225 +1,102 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
 import {
-  Brain,
-  Briefcase,
-  Code,
-  Home,
-  Mail,
-  Menu,
-  User,
-  X,
-} from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+  MobileNav,
+  MobileNavHeader,
+  MobileNavMenu,
+  MobileNavToggle,
+  NavBody,
+  NavItems,
+  Navbar,
+  NavbarButton,
+  NavbarLogo,
+} from "@/components/ui/resizable-navbar";
+import { useState } from "react";
 import { AIChatbot } from "./ai-chatbot";
 
 const navItems = [
-  { name: "Home", href: "#home", icon: Home },
-  { name: "About", href: "#about", icon: User },
-  { name: "Services", href: "#services", icon: Briefcase },
-  { name: "Projects", href: "#projects", icon: Code },
-  { name: "Contact", href: "#contact", icon: Mail },
+  { name: "Home", link: "#home" },
+  { name: "About", link: "#about" },
+  { name: "Services", link: "#services" },
+  { name: "Projects", link: "#projects" },
+  { name: "Contact", link: "#contact" },
 ];
 
 export const AdvancedNavbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((previous) => !previous);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -80% 0px",
-      threshold: 0,
-    };
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const sectionId = entry.target.id;
-          setActiveSection(sectionId);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions
-    );
-
-    // Observe all elements with an ID
-    const sections = document.querySelectorAll("[id]");
-    sections.forEach((section) => observer.observe(section));
-
-    return () => {
-      sections.forEach((section) => observer.unobserve(section));
-    };
-  }, []);
-
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-    }
-  };
+  const openChat = () => setIsChatbotOpen(true);
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-slate-900/95 backdrop-blur-md border-b border-slate-700/50"
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href={"/"}>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="flex items-center space-x-2"
-              >
-                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-indigo-300 to-purple-400 bg-clip-text text-transparent">
-                  Tarif
-                </span>
-              </motion.div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <motion.button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.href)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
-                      activeSection === item.href.replace("#", "")
-                        ? "text-indigo-300 bg-indigo-500/10"
-                        : "text-slate-300 hover:text-indigo-300 hover:bg-slate-800/50"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.name}</span>
-                    {activeSection === item.href.replace("#", "") && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="absolute inset-0 bg-indigo-500/20 rounded-lg border border-indigo-400/30"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          bounce: 0.2,
-                          duration: 0.6,
-                        }}
-                      />
-                    )}
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* CTA Button */}
-            <div className="hidden md:block">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button
-                  onClick={() => setIsChatbotOpen(true)}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0 shadow-lg"
-                >
-                  Let's Talk AI
-                </Button>
-              </motion.div>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-slate-300 hover:text-indigo-300 p-2"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </motion.button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden bg-slate-900/95 backdrop-blur-md border-t border-slate-700/50"
+      <Navbar>
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="hidden items-center gap-3 md:flex">
+            <NavbarButton href="#projects" variant="secondary">
+              Case Studies
+            </NavbarButton>
+            <NavbarButton
+              as="button"
+              type="button"
+              variant="primary"
+              onClick={openChat}
             >
-              <div className="px-4 py-4 space-y-2">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <motion.button
-                      key={item.name}
-                      onClick={() => scrollToSection(item.href)}
-                      whileHover={{ x: 10 }}
-                      className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-3 ${
-                        activeSection === item.href.replace("#", "")
-                          ? "text-indigo-300 bg-indigo-500/10"
-                          : "text-slate-300 hover:text-indigo-300 hover:bg-slate-800/50"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      <span>{item.name}</span>
-                    </motion.button>
-                  );
-                })}
-                <div className="pt-4 border-t border-slate-700/50">
-                  <Button
-                    onClick={() => {
-                      setIsChatbotOpen(true);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0"
-                  >
-                    Let's Talk AI
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+              Let&apos;s Talk AI
+            </NavbarButton>
+          </div>
+        </NavBody>
 
-      {/* AIChatbot Component */}
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={toggleMobileMenu}
+            />
+          </MobileNavHeader>
+          <MobileNavMenu isOpen={isMobileMenuOpen} onClose={closeMobileMenu}>
+            {navItems.map((item) => (
+              <a
+                key={item.link}
+                href={item.link}
+                onClick={closeMobileMenu}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              <NavbarButton
+                href="#projects"
+                variant="secondary"
+                className="w-full"
+                onClick={closeMobileMenu}
+              >
+                Case Studies
+              </NavbarButton>
+              <NavbarButton
+                as="button"
+                type="button"
+                variant="primary"
+                className="w-full"
+                onClick={() => {
+                  closeMobileMenu();
+                  openChat();
+                }}
+              >
+                Let&apos;s Talk AI
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
+
       <AIChatbot
         isOpen={isChatbotOpen}
         onClose={() => setIsChatbotOpen(false)}

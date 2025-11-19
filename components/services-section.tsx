@@ -1,75 +1,87 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Globe, Server, Smartphone, Database, Cloud, Shield } from "lucide-react"
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { LampContainer } from "@/components/ui/lamp";
+import { motion } from "framer-motion";
+import {
+  Cloud,
+  Database,
+  Globe,
+  Server,
+  Shield,
+  Smartphone,
+} from "lucide-react";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
-  },
-}
+type ServiceCard = {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  color: string;
+  features: string[];
+  area: string;
+};
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-}
-
-const services = [
+const services: ServiceCard[] = [
   {
     icon: Globe,
     title: "Frontend Development",
-    description: "Modern, responsive web applications using React, Next.js, and cutting-edge UI frameworks.",
-    color: "from-blue-500 to-cyan-500",
+    description:
+      "Modern, responsive web applications using React, Next.js, and cutting-edge UI frameworks.",
+    color: "from-[#7c3aed] via-[#6366f1] to-[#22d3ee]",
     features: ["React/Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    area: "md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]",
   },
   {
     icon: Server,
     title: "Backend Development",
-    description: "Scalable server-side solutions with robust APIs, databases, and cloud integrations.",
-    color: "from-emerald-500 to-teal-500",
+    description:
+      "Scalable server-side solutions with robust APIs, databases, and cloud integrations.",
+    color: "from-[#0ea5e9] to-[#14b8a6]",
     features: ["Node.js/Express", "Python/Django", "PostgreSQL", "MongoDB"],
+    area: "md:[grid-area:1/7/2/13] xl:[grid-area:1/5/2/9]",
   },
   {
     icon: Smartphone,
     title: "Mobile Development",
-    description: "Cross-platform mobile apps with native performance and seamless user experiences.",
-    color: "from-purple-500 to-pink-500",
+    description:
+      "Cross-platform mobile apps with native performance and seamless user experiences.",
+    color: "from-[#ec4899] to-[#f472b6]",
     features: ["React Native", "Flutter", "iOS/Android", "App Store Deploy"],
+    area: "md:[grid-area:2/1/3/7] xl:[grid-area:1/9/2/13]",
   },
   {
     icon: Database,
     title: "Database Design",
-    description: "Optimized database architecture with performance tuning and data modeling expertise.",
-    color: "from-orange-500 to-red-500",
-    features: ["SQL/NoSQL", "Data Modeling", "Performance Tuning", "Migrations"],
+    description:
+      "Optimized database architecture with performance tuning and data modeling expertise.",
+    color: "from-[#f97316] to-[#f43f5e]",
+    features: [
+      "SQL/NoSQL",
+      "Data Modeling",
+      "Performance Tuning",
+      "Migrations",
+    ],
+    area: "md:[grid-area:2/7/3/13] xl:[grid-area:2/1/3/6]",
   },
   {
     icon: Cloud,
     title: "DevOps & Deployment",
-    description: "CI/CD pipelines, cloud infrastructure, and automated deployment solutions.",
-    color: "from-indigo-500 to-purple-500",
+    description:
+      "CI/CD pipelines, cloud infrastructure, and automated deployment solutions.",
+    color: "from-[#4f46e5] to-[#a855f7]",
     features: ["AWS/Vercel", "Docker", "CI/CD", "Monitoring"],
+    area: "md:[grid-area:3/1/4/13] xl:[grid-area:2/6/3/10]",
   },
   {
     icon: Shield,
     title: "Security & Testing",
-    description: "Comprehensive security audits, testing strategies, and performance optimization.",
-    color: "from-yellow-500 to-orange-500",
+    description:
+      "Comprehensive security audits, testing strategies, and performance optimization.",
+    color: "from-[#facc15] to-[#fb923c]",
     features: ["Security Audits", "Unit Testing", "E2E Testing", "Performance"],
+    area: "xl:[grid-area:2/10/3/13] hidden md:block",
   },
-]
+];
 
 export const ServicesSection = () => {
   return (
@@ -79,54 +91,79 @@ export const ServicesSection = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="glass-effect rounded-xl p-8 mb-12"
+      className="glass-effect rounded-xl p-4 lg:p-8 pt-0 mb-12"
     >
-      <div className="text-emerald-400 mb-6 font-mono">
-        <span className="text-slate-400">$</span> cat services.json | jq '.offerings[]'
-      </div>
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+      <LampContainer
+        className="mb-12 min-h-[22rem]"
+        childrenWrapperClassName="relative z-50 flex translate-y-0 flex-col items-center gap-4 px-6 py-12 text-center"
       >
-        {services.map((service, index) => (
-          <motion.div
-            key={service.title}
-            variants={itemVariants}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 25px 50px -12px rgba(99, 102, 241, 0.3)",
-            }}
-            className="glass-effect rounded-lg p-6 group cursor-pointer"
-          >
-            <motion.div
-              className={`w-12 h-12 rounded-lg bg-gradient-to-r ${service.color} flex items-center justify-center mb-4`}
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.5 }}
-            >
-              <service.icon className="w-6 h-6 text-white" />
-            </motion.div>
-            <h3 className="text-xl font-semibold text-indigo-300 mb-3 group-hover:text-indigo-200 transition-colors">
-              {service.title}
-            </h3>
-            <p className="text-slate-300 text-sm mb-4 leading-relaxed">{service.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {service.features.map((feature) => (
-                <motion.span
-                  key={feature}
-                  whileHover={{ scale: 1.1 }}
-                  className="bg-slate-700 text-slate-300 px-2 py-1 rounded text-xs"
-                >
-                  {feature}
-                </motion.span>
-              ))}
-            </div>
-          </motion.div>
+        <p className="section-eyebrow text-slate-200">Services & Solutions</p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl md:text-4xl font-semibold text-white"
+        >
+          Full-stack engineering, AI workflows & cloud reliability
+        </motion.h2>
+        <p className="max-w-3xl text-slate-300 text-sm md:text-base">
+          From immersive product design to DevOps automation, I ship complete
+          web platforms—React/Next.js frontends, type-safe APIs, LangChain
+          copilots, and infrastructure that scales.
+        </p>
+      </LampContainer>
+
+      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
+        {services.map((service) => (
+          <GridItem key={service.title} {...service} />
         ))}
-      </motion.div>
+      </ul>
     </motion.div>
-  )
-}
+  );
+};
+
+const GridItem = ({
+  area,
+  icon: Icon,
+  title,
+  description,
+  color,
+  features,
+}: ServiceCard) => {
+  return (
+    <li className={`min-h-[14rem] list-none ${area}`}>
+      <div className="relative h-full rounded-2xl border border-white/10 p-2 md:rounded-3xl md:p-3">
+        <GlowingEffect
+          spread={40}
+          glow
+          disabled={false}
+          proximity={64}
+          inactiveZone={0.05}
+        />
+        <div className="relative flex h-full flex-col gap-5 rounded-xl border border-white/5 bg-slate-950/80 p-6 shadow-[0_0_27px_0_rgba(45,45,45,0.45)]">
+          <div>
+            <div
+              className={`w-12 h-12 rounded-xl bg-gradient-to-r ${color} flex items-center justify-center shadow-lg shadow-black/40`}
+            >
+              <Icon className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-xl font-semibold text-white">{title}</h3>
+            <p className="text-sm text-slate-300">{description}</p>
+          </div>
+          <div className="mt-auto flex flex-wrap gap-2">
+            {features.map((feature) => (
+              <span
+                key={feature}
+                className="text-xs px-2 py-1 rounded border border-white/15 text-slate-200 bg-white/5"
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};

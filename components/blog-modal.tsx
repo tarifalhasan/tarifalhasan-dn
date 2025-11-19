@@ -118,28 +118,21 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-xl shadow-2xl overflow-hidden">
-        {/* Terminal Header */}
-        <div className="bg-slate-800 border-b border-slate-700 p-4">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-2xl shadow-[0_35px_120px_rgba(6,10,35,0.55)] overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] p-4 text-white">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <div className="text-slate-300 font-mono text-sm">
-                <span className="text-emerald-400">$</span> cat ./blog/{post.id}.md
-              </div>
+            <div className="text-sm uppercase tracking-[0.35em] font-semibold opacity-80">
+              Journal Entry
             </div>
             <Button
               onClick={onClose}
               variant="ghost"
               size="sm"
-              className="text-slate-400 hover:text-slate-200 hover:bg-slate-700"
+              className="text-white hover:text-white/80 hover:bg-white/10"
             >
               ✕
             </Button>
@@ -151,23 +144,23 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           {/* Article Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded font-mono">{post.category}</span>
-              <div className="flex items-center gap-4 text-xs text-slate-400">
+              <span className="text-xs luminous-pill text-slate-800 dark:text-slate-100">{post.category}</span>
+              <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1">📅 {post.date}</span>
                 <span className="flex items-center gap-1">⏱️ {post.readTime}</span>
                 <span className="flex items-center gap-1">👤 {post.author}</span>
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-indigo-300 mb-4 leading-tight">{post.title}</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-indigo-200 mb-4 leading-tight">{post.title}</h1>
 
-            <p className="text-slate-300 text-lg leading-relaxed mb-6">{post.excerpt}</p>
+            <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-6">{post.excerpt}</p>
 
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs bg-indigo-900/50 text-indigo-300 px-2 py-1 rounded border border-indigo-700"
+                  className="text-xs px-2 py-1 rounded border border-white/30 bg-white/70 text-slate-800 dark:bg-white/5 dark:text-indigo-200"
                 >
                   #{tag}
                 </span>
@@ -176,20 +169,23 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           </div>
 
           {/* Article Content */}
-          <div className="prose prose-invert prose-slate max-w-none">
+          <div className="prose prose-slate dark:prose-invert max-w-none">
             <div
-              className="text-slate-300 leading-relaxed space-y-6 vs-code-container"
+              className="text-slate-700 dark:text-slate-300 leading-relaxed space-y-6 vs-code-container"
               dangerouslySetInnerHTML={{ __html: formatContent(post.content) }}
             />
           </div>
 
           {/* Footer */}
-          <div className="mt-12 pt-8 border-t border-slate-700">
+          <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
             <div className="flex items-center justify-between">
-              <div className="text-slate-400 text-sm">
-                <span className="text-emerald-400 font-mono">$</span> Thanks for reading!
+              <div className="text-slate-600 dark:text-slate-400 text-sm">
+                Thanks for reading!
               </div>
-              <Button onClick={onClose} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+              <Button
+                onClick={onClose}
+                className="bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] hover:from-[#6d28d9] hover:via-[#9333ea] hover:to-[#0ea5e9] text-white"
+              >
                 Close Article
               </Button>
             </div>
