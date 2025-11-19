@@ -3,8 +3,8 @@ import { ScrollProgress } from "@/components/ui/scroll-progress";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import Script from "next/script";
 import type React from "react";
-
 const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
@@ -94,7 +94,7 @@ export const metadata: Metadata = {
       "google-site-verification=-jR1PtI8nJMvVSwQEwAM0pxs5RSz4Kyr1hYhR0RID7U",
   },
   category: "technology",
-  generator: "v0.app",
+  generator: "tarifalhasan.vercel.app",
 };
 
 const jsonLd = {
@@ -175,8 +175,25 @@ export default function RootLayout({
         {/* <link rel="manifest" href="/site.webmanifest" /> */}
         <meta name="theme-color" content="#0f172a" />
         <meta name="msapplication-TileColor" content="#0f172a" />
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-XYZ');
+          `}
+        </Script>
       </head>
       <body className="font-sans">
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-XYZ"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
