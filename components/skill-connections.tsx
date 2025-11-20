@@ -8,8 +8,8 @@ import {
   Code2,
   Database,
   Server,
-  Sparkles,
   Smartphone,
+  Sparkles,
 } from "lucide-react";
 import { forwardRef, useRef } from "react";
 
@@ -42,11 +42,13 @@ export const SkillConnections = () => {
   const sparklesRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="glass-effect rounded-xl p-8 mb-12">
-      <div className="section-eyebrow mb-4">Systems Thinking</div>
-      <h3 className="text-2xl md:text-3xl font-semibold text-white mb-8">
-        How each skill connects inside my delivery stack
-      </h3>
+    <div className="mb-12">
+      <div className="text-center">
+        <p className="section-eyebrow mb-4">Systems Thinking</p>
+        <h3 className="text-2xl md:text-3xl font-semibold text-white mb-8">
+          How each skill connects inside my delivery stack
+        </h3>
+      </div>
       <div
         className="relative flex h-[320px] w-full items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-slate-950/60 p-6"
         ref={containerRef}
@@ -126,4 +128,3 @@ export const SkillConnections = () => {
     </div>
   );
 };
-

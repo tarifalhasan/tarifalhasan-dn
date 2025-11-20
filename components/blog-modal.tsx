@@ -69,7 +69,7 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
       const codeId = Math.random().toString(36).substr(2, 9)
       const lines = code.trim().split("\n")
       const numberedLines = lines
-        .map((line, index) => `<span class="line-number">${index + 1}</span><span class="line-content">${line}</span>`)
+        .map((line: string, index: number) => `<span class="line-number">${index + 1}</span><span class="line-content">${line}</span>`)
         .join("\n")
 
       return `

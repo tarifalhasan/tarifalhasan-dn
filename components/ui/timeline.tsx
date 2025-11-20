@@ -28,8 +28,11 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
   const opacityTransform = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
   return (
-    <div className="glass-effect rounded-xl p-8 mb-12" ref={containerRef}>
-      <div className="max-w-7xl mx-auto py-20 px-4 md:px-8 lg:px-10">
+    <div
+      className="glass-effect rounded-xl p-4 lg:p-8  mb-6 lg:mb-12"
+      ref={containerRef}
+    >
+      <div className="max-w-7xl mx-auto  py-2 lg:py-20 ">
         <h2 className="text-lg md:text-4xl mb-4 text-black dark:text-white max-w-4xl">
           Changelog from my journey
         </h2>

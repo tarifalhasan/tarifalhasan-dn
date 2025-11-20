@@ -187,19 +187,25 @@
 }
 
 .terminal-window {
-  background: linear-gradient(135deg, rgba(13, 18, 36, 0.95), rgba(5, 11, 27, 0.85));
+  background: linear-gradient(
+    135deg,
+    rgba(13, 18, 36, 0.95),
+    rgba(5, 11, 27, 0.85)
+  );
   border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
   box-shadow: 0 25px 60px -20px rgba(6, 10, 24, 0.9);
 }
 
 .glass-effect {
   position: relative;
-  background:
-    linear-gradient(160deg, rgba(2, 6, 23, 0.98), rgba(3, 7, 18, 0.92)),
+  background: linear-gradient(
+      160deg,
+      rgba(2, 6, 23, 0.98),
+      rgba(3, 7, 18, 0.92)
+    ),
     linear-gradient(45deg, rgba(15, 23, 42, 0.75), rgba(2, 6, 23, 0.9));
   border: 1px solid rgba(148, 163, 184, 0.08);
-  box-shadow:
-    0 18px 45px -30px rgba(2, 6, 23, 0.95),
+  box-shadow: 0 18px 45px -30px rgba(2, 6, 23, 0.95),
     0 25px 60px -50px rgba(2, 6, 23, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(22px);
@@ -213,10 +219,13 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(120deg, rgba(30, 41, 59, 0.45), rgba(15, 23, 42, 0.4), rgba(2, 6, 23, 0.5));
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+  background: linear-gradient(
+    120deg,
+    rgba(30, 41, 59, 0.45),
+    rgba(15, 23, 42, 0.4),
+    rgba(2, 6, 23, 0.5)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -295,7 +304,11 @@
 .hero-orb--violet {
   width: 380px;
   height: 380px;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.85), transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(167, 139, 250, 0.85),
+    transparent 65%
+  );
   top: -40px;
   right: 10%;
 }
@@ -303,7 +316,11 @@
 .hero-orb--cyan {
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.75), transparent 60%);
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.75),
+    transparent 60%
+  );
   bottom: -60px;
   left: 5%;
   animation-delay: 4s;
@@ -322,18 +339,24 @@
   position: relative;
   padding: 1rem 1.25rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.75));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(248, 250, 252, 0.75)
+  );
   border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow:
-    0 10px 30px -15px rgba(15, 23, 42, 0.45),
+  box-shadow: 0 10px 30px -15px rgba(15, 23, 42, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .dark .hero-stat-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(2, 6, 23, 0.8));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8),
+    rgba(2, 6, 23, 0.8)
+  );
   border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow:
-    0 15px 35px -20px rgba(2, 6, 23, 0.9),
+  box-shadow: 0 15px 35px -20px rgba(2, 6, 23, 0.9),
     inset 0 1px 0 rgba(148, 163, 184, 0.1);
 }
 
@@ -409,15 +432,89 @@
   animation-duration: 20s;
 }
 
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotation {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+.animate-apple-gradient {
+  position: relative;
+  background: linear-gradient(
+    var(--gradient-angle),
+    #0096FF,
+    #BB64FF,
+    #F2416B,
+    #EB7500
+  );
+  animation: rotation 5s linear infinite;
+  border-radius: 0.75rem;
+}
+
+.animate-apple-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0.3rem;
+  filter: blur(0.3rem);
+  background-color: rgb(245, 245, 247);
+  border-radius: 0.75rem;
+  z-index: 0;
+}
+
+.dark .animate-apple-gradient::before {
+  background-color: rgb(15, 23, 42);
+}
+
+.animate-apple-gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
+@layer utilities {
+  .bg-apple-intelligence {
+    --tw-bg: radial-gradient(
+        600px 420px at 15% 20%,
+        rgba(0, 176, 255, 0.25),
+        rgba(124, 58, 237, 0.15) 40%,
+        transparent 70%
+      ),
+      radial-gradient(
+        700px 520px at 85% 80%,
+        rgba(255, 92, 168, 0.25),
+        rgba(255, 159, 67, 0.18) 35%,
+        transparent 70%
+      ),
+      linear-gradient(180deg, #0a1e3a 0%, #050914 100%);
+
+    background-image: var(--tw-bg);
+    background-blend-mode: screen, screen, normal;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
 .hero-portrait {
   position: absolute;
   inset: 18px;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3), rgba(15, 23, 42, 0.9));
-  box-shadow:
-    inset 0 0 25px rgba(15, 23, 42, 0.6),
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(255, 255, 255, 0.3),
+    rgba(15, 23, 42, 0.9)
+  );
+  box-shadow: inset 0 0 25px rgba(15, 23, 42, 0.6),
     0 15px 45px rgba(15, 23, 42, 0.45);
 }
 
@@ -462,7 +559,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--accent) 80%, transparent));
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    color-mix(in oklab, var(--accent) 80%, transparent)
+  );
   border-radius: 4px;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -494,11 +595,19 @@ html {
 
 /* Custom scrollbar for specific containers */
 .terminal-window::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 80%, transparent), var(--primary));
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--accent) 80%, transparent),
+    var(--primary)
+  );
 }
 
 .terminal-window::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--primary), color-mix(in oklab, white 50%, var(--primary)));
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    color-mix(in oklab, white 50%, var(--primary))
+  );
   box-shadow: 0 0 15px rgba(124, 115, 255, 0.5);
 }
 
@@ -508,8 +617,16 @@ html {
   }
   body {
     @apply bg-background text-foreground font-sans;
-    background-image: radial-gradient(circle at 20% 20%, rgba(124, 115, 255, 0.15), transparent 45%),
-      radial-gradient(circle at 80% 0%, rgba(45, 212, 191, 0.2), transparent 50%);
+    background-image: radial-gradient(
+        circle at 20% 20%,
+        rgba(124, 115, 255, 0.15),
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 80% 0%,
+        rgba(45, 212, 191, 0.2),
+        transparent 50%
+      );
     background-attachment: fixed;
   }
 }

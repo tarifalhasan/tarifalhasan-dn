@@ -8,36 +8,12 @@ import { HeroSection } from "@/components/hero-section";
 import { ServicesSection } from "@/components/services-section";
 import { SkillConnections } from "@/components/skill-connections";
 import type { BlogPost } from "@/data/blog-posts";
-import { motion } from "framer-motion";
 import { useState } from "react";
 import { Testimonials } from "./AnimatedTestimonials";
 import FeaturedProjects from "./featured-projects";
 import ImpactShowcase from "./impact-showcase";
 import { ProjedctShowcase } from "./ProjedctShowcase";
 import SkillSection from "./skill-section";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-};
 
 type HomePageClientProps = {
   blogArticles: BlogPost[];
@@ -64,12 +40,7 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
       <FloatingParticles />
       <AdvancedNavbar />
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="container mx-auto px-4 py-8 relative z-10"
-      >
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <HeroSection />
         <ServicesSection />
         <ImpactShowcase />
@@ -79,22 +50,10 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
         <SkillSection />
 
         {/* Development Process */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="glass-effect rounded-xl p-8 mb-12"
-        >
+        <div className="mb-6 lg:mb-12">
           <div className="section-eyebrow mb-6">Delivery Framework</div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid md:grid-cols-4 gap-6"
-          >
+          <div className="grid md:grid-cols-4 gap-6">
             {[
               {
                 step: "01",
@@ -125,40 +84,23 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
                 icon: "🚀",
               },
             ].map((process, index) => (
-              <motion.div
-                key={process.step}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                className="text-center group"
-              >
-                <motion.div
-                  className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#38bdf8] rounded-full flex items-center justify-center text-2xl font-bold text-white relative shadow-lg shadow-[#7c3aed]/40"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
+              <div key={process.step} className="text-center group">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#38bdf8] rounded-full flex items-center justify-center text-2xl font-bold text-white relative shadow-lg shadow-[#7c3aed]/40">
                   <span className="text-sm">{process.step}</span>
-                  <motion.div
-                    className="absolute -top-2 -right-2 text-2xl"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      delay: index * 0.5,
-                    }}
-                  >
+                  <div className="absolute -top-2 -right-2 text-2xl">
                     {process.icon}
-                  </motion.div>
-                </motion.div>
+                  </div>
+                </div>
                 <h3 className="text-lg font-semibold text-slate-800 dark:text-violet-200 mb-2 group-hover:text-violet-400 transition-colors">
                   {process.title}
                 </h3>
                 <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                   {process.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Featured Projects */}
         <FeaturedProjects />
@@ -168,7 +110,7 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
         </div>
 
         {/* Blog & Articles */}
-        <div className="glass-effect rounded-xl p-8 mb-12">
+        <div className=" mb-6 lg:mb-12">
           <div className="section-eyebrow mb-6">Insights & Articles</div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -206,35 +148,17 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
         </div>
 
         {/* Testimonials */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="glass-effect rounded-xl p-8 mb-12"
-        >
+        <div className=" mb-6 lg:mb-12">
           <Testimonials />
-        </motion.div>
+        </div>
 
         {/* Achievements & Certifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="glass-effect rounded-xl p-8 mb-12"
-        >
+        <div className=" mb-6 lg:mb-12">
           <div className="section-eyebrow mb-6">
             Certifications & Highlights
           </div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 title: "AWS Certified",
@@ -261,23 +185,11 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
                 year: "2022",
               },
             ].map((achievement, index) => (
-              <motion.div
+              <div
                 key={achievement.title}
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
                 className="glass-effect rounded-lg p-6 text-center group"
               >
-                <motion.div
-                  className="text-4xl mb-3"
-                  animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    delay: index * 0.5,
-                  }}
-                >
-                  {achievement.icon}
-                </motion.div>
+                <div className="text-4xl mb-3">{achievement.icon}</div>
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-indigo-200 mb-1 group-hover:text-indigo-200 transition-colors">
                   {achievement.title}
                 </h3>
@@ -288,13 +200,13 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
                   <span>🏆</span>
                   {achievement.year}
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         <ContactSection />
-      </motion.div>
+      </div>
 
       {/* BlogModal component */}
       <BlogModal

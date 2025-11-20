@@ -1,31 +1,9 @@
 import { GlowingEffect } from "@/components/ui/glowing-effect";
-import { motion, Variants } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
 
 const FeaturedProjects = () => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
-  };
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
   interface Project {
     title: string;
     description: string;
@@ -114,29 +92,12 @@ const FeaturedProjects = () => {
   ];
 
   return (
-    <motion.div
-      id="projects"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-      className="glass-effect rounded-xl p-8 mb-12"
-    >
+    <div id="projects" className="glass-effect rounded-xl p-4 lg:p-8 mb-12">
       <div className="section-eyebrow mb-6">Recent Signature Work</div>
 
-      <motion.ul
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
+      <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project: Project, index: number) => (
-          <motion.li
-            key={project.title}
-            variants={itemVariants}
-            className="list-none"
-          >
+          <li key={project.title} className="list-none">
             <div className="relative h-full rounded-2xl border border-white/10 p-3">
               <GlowingEffect
                 spread={36}
@@ -156,12 +117,8 @@ const FeaturedProjects = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 to-transparent" />
                 </div>
-                <motion.div
+                <div
                   className={`w-full h-2 bg-gradient-to-r ${project.gradient} rounded-full`}
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
                 />
                 <div className="flex justify-between items-start">
                   <h3 className="text-lg font-semibold text-white">
@@ -185,10 +142,7 @@ const FeaturedProjects = () => {
                   ))}
                 </div>
                 <div className="mt-auto flex gap-3">
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
+                  <div>
                     <Link href={project.link} target="_blank">
                       <Button
                         size="sm"
@@ -199,12 +153,9 @@ const FeaturedProjects = () => {
                         Demo
                       </Button>
                     </Link>
-                  </motion.div>
+                  </div>
                   {project.code === "private" ? null : (
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
+                    <div>
                       <Button
                         size="sm"
                         variant="outline"
@@ -213,15 +164,15 @@ const FeaturedProjects = () => {
                         <span className="mr-2">📁</span>
                         Code
                       </Button>
-                    </motion.div>
+                    </div>
                   )}
                 </div>
               </div>
             </div>
-          </motion.li>
+          </li>
         ))}
-      </motion.ul>
-    </motion.div>
+      </ul>
+    </div>
   );
 };
 

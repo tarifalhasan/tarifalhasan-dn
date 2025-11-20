@@ -1,4 +1,5 @@
 import { WobbleCard } from "@/components/ui/wobble-card";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const cards = [
@@ -36,7 +37,7 @@ const cards = [
 
 const ImpactShowcase = () => {
   return (
-    <div className=" mx-auto glass-effect rounded-xl p-8 mb-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div className=" mx-auto  mb-12 grid grid-cols-1 lg:grid-cols-3 gap-4">
       {cards.map((card) => (
         <WobbleCard
           key={card.title}
@@ -59,7 +60,7 @@ const ImpactShowcase = () => {
               height={card.height}
               alt={card.title}
               src={card.image}
-              className={card.accent}
+              className={cn(card.accent, "object-contain hidden lg:block")}
             />
           )}
         </WobbleCard>

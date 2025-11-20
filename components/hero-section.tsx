@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { ArrowRight, Brain, Github, Sparkles } from "lucide-react";
+import { ArrowRight, Github, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -47,49 +46,34 @@ const heroHighlights = [
 export const HeroSection = () => {
   return (
     <div id="home" className="pt-18 lg:pt-24 relative z-10">
-      <div className="hero-ambient">
+      {/* <div className="hero-ambient">
         <div className="hero-orb hero-orb--violet" />
         <div className="hero-orb hero-orb--cyan" />
         <div className="hero-orb hero-orb--emerald" />
-      </div>
+      </div> */}
 
-      <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="glass-effect hero-shell p-8 lg:p-12 mb-12 relative flex flex-col gap-10"
-      >
+      <div className="mb-12 flex flex-col gap-10">
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center w-full relative z-10">
           <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              <motion.h1
-                className="text-4xl lg:text-[3.4rem] font-bold bg-gradient-to-r from-[#f0abfc] via-[#a5b4fc] to-[#5eead4] bg-clip-text text-transparent leading-tight"
-                animate={{
-                  backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            <div>
+              <h1
+                className="text-4xl lg:text-[3.4rem] font-bold bg-clip-text text-transparent leading-tight"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, #5BBFF6 0%, #7F6AF2 28%, #B651D7 49%, #E83E54 67%, #ED8939 100%)",
                 }}
-                transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
-                style={{ backgroundSize: "200% 200%" }}
               >
                 Tarif Al Hasan
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="text-slate-800 dark:text-slate-200 text-lg leading-relaxed max-w-2xl"
-              >
+              <p className="text-slate-800 dark:text-slate-200 text-lg leading-relaxed max-w-2xl">
                 As a Full-Stack Developer and Freelance, I build
                 high-performance web apps, APIs, and digital platforms using
                 React, Next.js, Node.js, Prisma, Supabase, and modern DevOps
                 workflows. My focus is on clean architecture, scalability, and
                 exceptional user experience.
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               {heroStats.map((stat) => (
@@ -107,31 +91,23 @@ export const HeroSection = () => {
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-              className="flex flex-wrap gap-4"
-            >
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
+            <div className="flex flex-wrap gap-4">
+              <div>
                 <Link href={"#contact"} className="cursor-pointer">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] hover:from-[#6d28d9] hover:via-[#9333ea] hover:to-[#0ea5e9] text-white border-0 shadow-lg shadow-[#7c3aed]/40 px-8"
+                    className="text-white border-0 shadow-lg shadow-[#5BBFF6]/30 px-8 hover:opacity-90 transition-opacity"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(to right, #5BBFF6 0%, #7F6AF2 28%, #B651D7 49%, #E83E54 67%, #ED8939 100%)",
+                    }}
                   >
-                    <Brain className="w-5 h-5 mr-2" />
                     Projects
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
+              </div>
+              <div>
                 <Link
                   passHref
                   target="_blank"
@@ -147,8 +123,8 @@ export const HeroSection = () => {
                     GitHub
                   </Button>
                 </Link>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             <div className="space-y-5 not-sr-only lg:sr-only">
               {heroHighlights.map((highlight) => (
@@ -167,12 +143,7 @@ export const HeroSection = () => {
             </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-            className="relative flex justify-center lg:justify-end"
-          >
+          <div className="relative flex justify-center lg:justify-end">
             <div className="hero-portrait-wrapper">
               <div className="hero-portrait-ring" />
               <div className="hero-portrait-ring hero-portrait-ring--outer" />
@@ -195,9 +166,9 @@ export const HeroSection = () => {
               <Sparkles className="w-4 h-4" />
               Backend APIs
             </div>
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

@@ -2,7 +2,6 @@
 
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { LampContainer } from "@/components/ui/lamp";
-import { motion } from "framer-motion";
 import {
   Cloud,
   Database,
@@ -85,27 +84,15 @@ const services: ServiceCard[] = [
 
 export const ServicesSection = () => {
   return (
-    <motion.div
-      id="services"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-      className="glass-effect rounded-xl p-4 lg:p-8 pt-0 mb-12"
-    >
+    <div id="services" className="pt-0 lg:pt-0 mb-12">
       <LampContainer
-        className="mb-12 min-h-[22rem]"
+        className="mb-4 bg-transparent lg:mb-12 rounded-none min-h-[8rem]  lg:min-h-[22rem]"
         childrenWrapperClassName="relative z-50 flex translate-y-0 flex-col items-center gap-4 px-6 py-12 text-center"
       >
         <p className="section-eyebrow text-slate-200">Services & Solutions</p>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-3xl md:text-4xl font-semibold text-white"
-        >
-          Full-stack engineering, AI workflows & cloud reliability
-        </motion.h2>
+        <h2 className="text-3xl md:text-4xl font-semibold text-white">
+          Full-stack development, AI workflows & cloud reliability
+        </h2>
         <p className="max-w-3xl text-slate-300 text-sm md:text-base">
           From immersive product design to DevOps automation, I ship complete
           web platforms—React/Next.js frontends, type-safe APIs, LangChain
@@ -113,12 +100,12 @@ export const ServicesSection = () => {
         </p>
       </LampContainer>
 
-      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
+      <ul className="grid grid-cols-1 p-4 lg:p-0 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
         {services.map((service) => (
           <GridItem key={service.title} {...service} />
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 };
 
