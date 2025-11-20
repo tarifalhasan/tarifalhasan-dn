@@ -92,8 +92,13 @@ const FeaturedProjects = () => {
   ];
 
   return (
-    <div id="projects" className="glass-effect rounded-xl p-4 lg:p-8 mb-12">
-      <div className="section-eyebrow mb-6">Recent Signature Work</div>
+    <div id="projects" className="mb-12">
+      <div className="container mb-6">
+        <h2 className="text-2xl font-bold">Featured Projects</h2>
+        <p className="text-gray-500">
+          Some of the projects that I'm proud of and that I've worked on.
+        </p>
+      </div>
 
       <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project: Project, index: number) => (

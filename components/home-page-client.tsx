@@ -12,8 +12,8 @@ import { useState } from "react";
 import { Testimonials } from "./AnimatedTestimonials";
 import FeaturedProjects from "./featured-projects";
 import ImpactShowcase from "./impact-showcase";
-import { ProjedctShowcase } from "./ProjedctShowcase";
 import SkillSection from "./skill-section";
+import { GlowingEffect } from "./ui/glowing-effect";
 
 type HomePageClientProps = {
   blogArticles: BlogPost[];
@@ -51,7 +51,13 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
 
         {/* Development Process */}
         <div className="mb-6 lg:mb-12">
-          <div className="section-eyebrow mb-6">Delivery Framework</div>
+          <div className="container mb-8 max-w-lg">
+            <h2 className="text-2xl font-bold">Delivery Framework</h2>
+            <p className="text-gray-500 text-sm lg:text-base">
+              How I deliver projects and how I ensure that the project is
+              delivered on time and within budget.
+            </p>
+          </div>
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
@@ -84,7 +90,17 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
                 icon: "🚀",
               },
             ].map((process, index) => (
-              <div key={process.step} className="text-center group">
+              <div
+                key={process.step}
+                className="text-center group relative rounded-2xl border border-white/10 py-5 px-3"
+              >
+                <GlowingEffect
+                  spread={36}
+                  glow
+                  disabled={false}
+                  proximity={64}
+                  inactiveZone={0.05}
+                />
                 <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#38bdf8] rounded-full flex items-center justify-center text-2xl font-bold text-white relative shadow-lg shadow-[#7c3aed]/40">
                   <span className="text-sm">{process.step}</span>
                   <div className="absolute -top-2 -right-2 text-2xl">
@@ -105,13 +121,18 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
         {/* Featured Projects */}
         <FeaturedProjects />
         {/* Product Timeline */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <ProjedctShowcase />
-        </div>
+        </div> */}
 
         {/* Blog & Articles */}
         <div className=" mb-6 lg:mb-12">
-          <div className="section-eyebrow mb-6">Insights & Articles</div>
+          <div className="container mb-6 max-w-lg">
+            <h2 className="text-2xl font-bold">Insights & Articles</h2>
+            <p className="text-gray-500 text-sm lg:text-base">
+              Some of the articles that I've written and that I'm proud of.
+            </p>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {blogArticles.map((article, index) => (
@@ -154,8 +175,12 @@ export function HomePageClient({ blogArticles }: HomePageClientProps) {
 
         {/* Achievements & Certifications */}
         <div className=" mb-6 lg:mb-12">
-          <div className="section-eyebrow mb-6">
-            Certifications & Highlights
+          <div className="container mb-6 max-w-lg">
+            <h2 className="text-2xl font-bold">Certifications & Highlights</h2>
+            <p className="text-gray-500 text-sm lg:text-base">
+              Some of the certifications that I've achieved and some of the
+              highlights of my work.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -38,5 +38,16 @@ export function Testimonials() {
       src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop",
     },
   ];
-  return <AnimatedTestimonials testimonials={testimonials} />;
+  return (
+    <div>
+      <div className="container max-w-lg">
+        <h2 className="text-2xl font-bold">Testimonials</h2>
+        <p className="text-gray-500 text-sm lg:text-base">
+          What people say about Tarif's work and his ability to deliver on time
+          and within budget.
+        </p>
+      </div>
+      <AnimatedTestimonials testimonials={testimonials} />
+    </div>
+  );
 }

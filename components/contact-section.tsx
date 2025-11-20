@@ -191,7 +191,12 @@ export const ContactSection = () => {
 
   return (
     <div id="contact" className="">
-      <div className="section-eyebrow mb-6">Start A Project</div>
+      <div className="container mb-6 max-w-lg">
+        <h2 className="text-2xl font-bold">Start A Project</h2>
+        <p className="text-gray-500 text-sm lg:text-base">
+          Let's start a project together.
+        </p>
+      </div>
 
       <div className="max-w-md mx-auto">
         <Form {...form}>
