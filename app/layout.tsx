@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import ParticleOrbitEffect from "@/components/ui/particle-orbit-effect";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
@@ -203,6 +204,31 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <ScrollProgress className="top-[0]" />
+        {/* <ParticleOrbitEffect
+          particleCount={30}
+          radius={80}
+          intensity={1.2}
+          colorRange={[180, 270]}
+          autoColors={true}
+        /> */}
+        // Energetic Preset
+        {/* <ParticleOrbitEffect
+          particleCount={40}
+          radius={90}
+          particleSpeed={0.04}
+          radiusScale={2}
+          intensity={1.5}
+          colorRange={[0, 60]}
+        /> */}
+        // Subtle Background Effect
+        <ParticleOrbitEffect
+          particleCount={40}
+          radius={70}
+          intensity={1}
+          fadeOpacity={0.03}
+          colorRange={[180, 270]}
+          disabled={false}
+        />
       </body>
     </html>
   );

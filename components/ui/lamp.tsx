@@ -1,26 +1,7 @@
 "use client";
-import React from "react";
-import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
-
-export default function LampDemo() {
-  return (
-    <LampContainer>
-      <motion.h1
-        initial={{ opacity: 0.5, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{
-          delay: 0.3,
-          duration: 0.8,
-          ease: "easeInOut",
-        }}
-        className="mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
-      >
-        Build lamps <br /> the right way
-      </motion.h1>
-    </LampContainer>
-  );
-}
+import { motion } from "motion/react";
+import React from "react";
 
 export const LampContainer = ({
   children,
@@ -34,7 +15,7 @@ export const LampContainer = ({
   return (
     <div
       className={cn(
-        "relative flex min-h-[28rem] flex-col items-center justify-center overflow-hidden bg-slate-950 w-full rounded-3xl z-0",
+        "relative flex min-h-[31rem] flex-col items-center justify-center overflow-hidden bg-slate-950 w-full rounded-3xl z-0",
         className
       )}
     >

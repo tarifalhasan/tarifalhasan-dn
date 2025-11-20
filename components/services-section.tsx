@@ -20,6 +20,8 @@ type ServiceCard = {
   area: string;
 };
 
+import { motion } from "motion/react";
+
 const services: ServiceCard[] = [
   {
     icon: Globe,
@@ -84,23 +86,23 @@ const services: ServiceCard[] = [
 
 export const ServicesSection = () => {
   return (
-    <div id="services" className="pt-0 lg:pt-0 mb-12">
-      <LampContainer
-        className="mb-4 bg-transparent lg:mb-12 rounded-none min-h-[8rem]  lg:min-h-[22rem]"
-        childrenWrapperClassName="relative z-50 flex translate-y-0 flex-col items-center gap-4 px-6 py-12 text-center"
-      >
-        <p className="section-eyebrow text-slate-200">Services & Solutions</p>
-        <h2 className="text-3xl md:text-4xl font-semibold text-white">
-          Full-stack development, AI workflows & cloud reliability
-        </h2>
-        <p className="max-w-3xl text-slate-300 text-sm md:text-base">
-          From immersive product design to DevOps automation, I ship complete
-          web platforms—React/Next.js frontends, type-safe APIs, LangChain
-          copilots, and infrastructure that scales.
-        </p>
+    <div id="services" className="pt-0 relative overflow-hidden lg:pt-0 mb-12">
+      <LampContainer>
+        <motion.h1
+          initial={{ opacity: 0.5, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.3,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="mt-[4rem] lg:mt-8 bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
+        >
+          Services & Solutions
+        </motion.h1>
       </LampContainer>
 
-      <ul className="grid grid-cols-1 p-4 lg:p-0 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
+      <ul className="grid grid-cols-1 -mt-[15rem] p-4 lg:p-0 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4 xl:max-h-[34rem] xl:grid-rows-2">
         {services.map((service) => (
           <GridItem key={service.title} {...service} />
         ))}
