@@ -238,7 +238,7 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="w-full max-w-lg overflow-hidden rounded-none max-h-[90vh] overflow-y-auto border-none bg-transparent p-0 shadow-none ">
         <div
-          className={`bg-white/90 dark:bg-slate-950/90  rounded-lg backdrop-blur-2xl w-full ${
+          className={`bg-white/90 border  dark:bg-[radial-gradient(circle_at_top,_#01030a,_#050912_65%)]  rounded-lg backdrop-blur-2xl w-full ${
             isMinimized ? "h-16" : "h-[650px]"
           } flex flex-col overflow-hidden`}
         >
@@ -325,7 +325,7 @@ export const AIChatbot = ({ isOpen, onClose }: AIChatbotProps) => {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-5 border-t border-white/30 dark:border-white/5 bg-gradient-to-r from-white/80 to-white/50 dark:from-slate-950/50 dark:to-slate-950/80 backdrop-blur-sm">
+              <div className="p-5 border-t border-white/30 dark:border-white/5 bg-[radial-gradient(circle_at_top,_#01030a,_#050912_65%)]  backdrop-blur-sm">
                 <div className="flex space-x-3">
                   <Input
                     value={inputValue}
