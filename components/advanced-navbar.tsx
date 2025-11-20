@@ -38,9 +38,6 @@ export const AdvancedNavbar = () => {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="hidden items-center gap-3 md:flex">
-            <NavbarButton href="#projects" variant="secondary">
-              Case Studies
-            </NavbarButton>
             <NavbarButton
               as="button"
               type="button"
@@ -72,14 +69,6 @@ export const AdvancedNavbar = () => {
               </a>
             ))}
             <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                href="#projects"
-                variant="secondary"
-                className="w-full"
-                onClick={closeMobileMenu}
-              >
-                Case Studies
-              </NavbarButton>
               <NavbarButton
                 as="button"
                 type="button"

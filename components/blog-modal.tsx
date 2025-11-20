@@ -1,78 +1,85 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 interface BlogPost {
-  id: string
-  title: string
-  excerpt: string
-  content: string
-  date: string
-  readTime: string
-  category: string
-  author: string
-  tags: string[]
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  readTime: string;
+  category: string;
+  author: string;
+  tags: string[];
 }
 
 interface BlogModalProps {
-  isOpen: boolean
-  onClose: () => void
-  post: BlogPost | null
+  isOpen: boolean;
+  onClose: () => void;
+  post: BlogPost | null;
 }
 
 export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
-  const [copiedCode, setCopiedCode] = useState<string | null>(null)
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isOpen])
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onClose()
+        onClose();
       }
-    }
+    };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape)
+      document.addEventListener("keydown", handleEscape);
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [isOpen, onClose])
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
 
   const copyToClipboard = async (code: string, id: string) => {
     try {
-      await navigator.clipboard.writeText(code)
-      setCopiedCode(id)
-      setTimeout(() => setCopiedCode(null), 2000)
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(id);
+      setTimeout(() => setCopiedCode(null), 2000);
     } catch (err) {
-      console.error("Failed to copy code:", err)
+      console.error("Failed to copy code:", err);
     }
-  }
+  };
 
   const formatContent = (content: string) => {
     // Replace code blocks with VS Code styled ones
-    return content.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, language, code) => {
-      const lang = language || "javascript"
-      const codeId = Math.random().toString(36).substr(2, 9)
-      const lines = code.trim().split("\n")
-      const numberedLines = lines
-        .map((line: string, index: number) => `<span class="line-number">${index + 1}</span><span class="line-content">${line}</span>`)
-        .join("\n")
+    return content.replace(
+      /```(\w+)?\n([\s\S]*?)```/g,
+      (match, language, code) => {
+        const lang = language || "javascript";
+        const codeId = Math.random().toString(36).substr(2, 9);
+        const lines = code.trim().split("\n");
+        const numberedLines = lines
+          .map(
+            (line: string, index: number) =>
+              `<span class="line-number">${
+                index + 1
+              }</span><span class="line-content">${line}</span>`
+          )
+          .join("\n");
 
-      return `
+        return `
         <div class="vs-code-block" data-language="${lang}">
           <div class="vs-code-header">
             <div class="vs-code-dots">
@@ -80,9 +87,13 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
               <span class="dot yellow"></span>
               <span class="dot green"></span>
             </div>
-            <div class="vs-code-title">${lang === "js" ? "coder.js" : `code.${lang}`}</div>
+            <div class="vs-code-title">${
+              lang === "js" ? "coder.js" : `code.${lang}`
+            }</div>
             <div class="vs-code-actions">
-              <button class="copy-btn" onclick="window.copyCode('${codeId}', \`${code.trim().replace(/`/g, "\\`")}\`)">
+              <button class="copy-btn" onclick="window.copyCode('${codeId}', \`${code
+          .trim()
+          .replace(/`/g, "\\`")}\`)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="m5 15-4-4 4-4"></path>
@@ -96,29 +107,39 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
             </div>
             <div class="vs-code-footer">
               <div class="status-left">UTF-8</div>
-              <div class="status-center">${lang === "js" ? "JavaScript" : lang.charAt(0).toUpperCase() + lang.slice(1)}</div>
-              <div class="status-right">Ln ${lines.length}, Col ${lines[lines.length - 1]?.length || 0}</div>
+              <div class="status-center">${
+                lang === "js"
+                  ? "JavaScript"
+                  : lang.charAt(0).toUpperCase() + lang.slice(1)
+              }</div>
+              <div class="status-right">Ln ${lines.length}, Col ${
+          lines[lines.length - 1]?.length || 0
+        }</div>
             </div>
           </div>
         </div>
-      `
-    })
-  }
+      `;
+      }
+    );
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      ;(window as any).copyCode = async (id: string, code: string) => {
-        await copyToClipboard(code, id)
-      }
+      (window as any).copyCode = async (id: string, code: string) => {
+        await copyToClipboard(code, id);
+      };
     }
-  }, [])
+  }, []);
 
-  if (!isOpen || !post) return null
+  if (!isOpen || !post) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
       {/* Modal */}
       <div className="relative w-full max-w-4xl max-h-[90vh] bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl border border-white/40 dark:border-white/10 rounded-2xl shadow-[0_35px_120px_rgba(6,10,35,0.55)] overflow-hidden">
@@ -144,17 +165,27 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           {/* Article Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs luminous-pill text-slate-800 dark:text-slate-100">{post.category}</span>
+              <span className="text-xs luminous-pill text-slate-800 dark:text-slate-100">
+                {post.category}
+              </span>
               <div className="flex items-center gap-4 text-xs text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1">📅 {post.date}</span>
-                <span className="flex items-center gap-1">⏱️ {post.readTime}</span>
-                <span className="flex items-center gap-1">👤 {post.author}</span>
+                <span className="flex items-center gap-1">
+                  ⏱️ {post.readTime}
+                </span>
+                <span className="flex items-center gap-1">
+                  👤 {post.author}
+                </span>
               </div>
             </div>
 
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-indigo-200 mb-4 leading-tight">{post.title}</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-indigo-200 mb-4 leading-tight">
+              {post.title}
+            </h1>
 
-            <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-6">{post.excerpt}</p>
+            <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-6">
+              {post.excerpt}
+            </p>
 
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
@@ -224,14 +255,21 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           border-radius: 50%;
         }
 
-        .dot.red { background: #ff5f56; }
-        .dot.yellow { background: #ffbd2e; }
-        .dot.green { background: #27ca3f; }
+        .dot.red {
+          background: #ff5f56;
+        }
+        .dot.yellow {
+          background: #ffbd2e;
+        }
+        .dot.green {
+          background: #27ca3f;
+        }
 
         .vs-code-title {
           color: #cccccc;
           font-size: 13px;
-          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+            Consolas, "Courier New", monospace;
           font-weight: 400;
         }
 
@@ -275,7 +313,8 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           padding: 16px 0;
           background: transparent;
           color: #d4d4d4;
-          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+            Consolas, "Courier New", monospace;
           font-size: 14px;
           line-height: 1.5;
           white-space: pre;
@@ -306,11 +345,14 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
           color: white;
           padding: 4px 16px;
           font-size: 12px;
-          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+            Consolas, "Courier New", monospace;
           height: 22px;
         }
 
-        .status-left, .status-center, .status-right {
+        .status-left,
+        .status-center,
+        .status-right {
           font-size: 12px;
         }
 
@@ -349,5 +391,5 @@ export function BlogModal({ isOpen, onClose, post }: BlogModalProps) {
         }
       `}</style>
     </div>
-  )
+  );
 }

@@ -1,12 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const getResend = () => {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("RESEND_API_KEY is not configured");
+const getTransporter = () => {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
+    throw new Error("SMTP credentials are not fully configured");
   }
-  return new Resend(apiKey);
+
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: Number(SMTP_PORT),
+    secure: Number(SMTP_PORT) === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  });
 };
 
 async function verifyRecaptcha(token: string) {
@@ -296,26 +306,18 @@ export async function POST(request: NextRequest) {
       </html>
     `;
 
-    const resend = getResend();
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || "contact@yourdomain.com",
-      to: process.env.CONTACT_EMAIL || "your-email@example.com",
+    const transporter = getTransporter();
+    const info = await transporter.sendMail({
+      from: process.env.CONTACT_FROM_EMAIL || process.env.SMTP_USER || "no-reply@tarifalhasan.com",
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER || "tarifalhasanjs@gmail.com",
       subject: `🤖 AI Portfolio Contact: ${subject}`,
       html: htmlTemplate,
       replyTo: email,
     });
 
-    if (error) {
-      console.error("Resend error:", error);
-      return NextResponse.json(
-        { error: "Failed to send email" },
-        { status: 500 }
-      );
-    }
-
     return NextResponse.json({
       message: "Email sent successfully",
-      id: data?.id,
+      id: info.messageId,
     });
   } catch (error) {
     console.error("Error sending email:", error);

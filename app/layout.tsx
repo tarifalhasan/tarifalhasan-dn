@@ -155,7 +155,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <link rel="icon" href="/favicon.ico" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
@@ -211,7 +210,7 @@ export default function RootLayout({
           colorRange={[180, 270]}
           autoColors={true}
         /> */}
-        // Energetic Preset
+
         {/* <ParticleOrbitEffect
           particleCount={40}
           radius={90}
@@ -220,7 +219,7 @@ export default function RootLayout({
           intensity={1.5}
           colorRange={[0, 60]}
         /> */}
-        // Subtle Background Effect
+
         <ParticleOrbitEffect
           particleCount={40}
           radius={70}

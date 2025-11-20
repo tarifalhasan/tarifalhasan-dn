@@ -7,7 +7,6 @@ import {
   useMotionValueEvent,
   useScroll,
 } from "motion/react";
-import Link from "next/link";
 
 import React, { useRef, useState } from "react";
 
@@ -68,7 +67,8 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   return (
     <motion.div
       ref={ref}
-      className={cn("fixed inset-x-0 top-4 z-50 w-full", className)}
+      // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
+      className={cn("fixed inset-x-0 top-5 z-40 w-full", className)}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
@@ -86,19 +86,24 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   return (
     <motion.div
       animate={{
-        backdropFilter: visible ? "blur(16px)" : "none",
+        backdropFilter: visible ? "blur(10px)" : "none",
         boxShadow: visible
-          ? "0 12px 40px rgba(4, 7, 26, 0.18), 0 1px 0 rgba(255, 255, 255, 0.08) inset"
+          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        y: visible ? 12 : 0,
+        width: visible ? "40%" : "100%",
+        y: visible ? 20 : 0,
       }}
       transition={{
         type: "spring",
         stiffness: 200,
-        damping: 40,
+        damping: 50,
+      }}
+      style={{
+        minWidth: "800px",
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-6xl flex-row items-center justify-between rounded-2xl border border-white/30 bg-white/80 px-6 py-3 shadow-xl backdrop-blur lg:flex dark:border-white/10 dark:bg-slate-950/70",
+        "relative z-[60] mx-auto hidden w-full container flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 lg:flex dark:bg-transparent",
+        visible && "bg-white/80 dark:bg-neutral-950/80",
         className
       )}
     >
@@ -226,20 +231,13 @@ export const MobileNavToggle = ({
 
 export const NavbarLogo = () => {
   return (
-    <Link
-      href="/"
-      className="relative z-20 mr-4 flex items-center gap-3 rounded-full px-2 py-1 text-sm font-semibold text-slate-900 dark:text-white"
+    <a
+      href="#"
+      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
     >
-      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-r from-[#7c3aed] to-[#22d3ee] text-white shadow-lg shadow-[#7c3aed]/40">
-        TA
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span className="text-sm font-semibold">Tarif Al Hasan</span>
-        <span className="text-xs font-medium text-slate-500 dark:text-slate-300">
-          Programmer
-        </span>
-      </div>
-    </Link>
+      <img src="/logo.png" alt="logo" width={30} height={30} />
+      <span className="font-medium text-black dark:text-white">Tarif</span>
+    </a>
   );
 };
 
