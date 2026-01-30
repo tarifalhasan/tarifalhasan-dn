@@ -145,6 +145,16 @@
   }
 }
 
+@utility container {
+  padding-inline: 1rem;
+  margin-inline: auto;
+  width: 100%;
+
+  @variant xl {
+    max-width: 1280px;
+  }
+}
+
 @keyframes typewriter {
   from {
     width: 0;
