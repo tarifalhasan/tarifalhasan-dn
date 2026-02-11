@@ -201,7 +201,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
-        <ScrollProgress className="top-[0]" />
+        <ScrollProgress className="top-[0] hidden lg:block" />
         {/* <ParticleOrbitEffect
           particleCount={30}
           radius={80}

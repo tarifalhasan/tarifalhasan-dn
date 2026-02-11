@@ -47,7 +47,7 @@ const ImpactShowcase = () => {
             <div className="text-sm uppercase tracking-[0.3em] text-white/70 mb-3">
               Impact Highlight
             </div>
-            <h3 className="text-left text-balance text-xl lg:text-3xl font-semibold tracking-[-0.01em] text-white">
+            <h3 className="text-left text-center lg:text-left  text-balance text-xl lg:text-3xl font-semibold tracking-[-0.01em] text-white">
               {card.title}
             </h3>
             <p className="mt-4 text-left text-base text-neutral-200">

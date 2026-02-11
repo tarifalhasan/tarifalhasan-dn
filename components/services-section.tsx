@@ -21,6 +21,8 @@ type ServiceCard = {
 };
 
 import { motion } from "motion/react";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const services: ServiceCard[] = [
   {
@@ -29,7 +31,7 @@ const services: ServiceCard[] = [
     description:
       "Modern, responsive web applications using React, Next.js, and cutting-edge UI frameworks.",
     color: "from-[#7c3aed] via-[#6366f1] to-[#22d3ee]",
-    features: ["React/Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    features: ["React/Next.js", "TypeScript", "Tailwind CSS",],
     area: "md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/5]",
   },
   {
@@ -38,7 +40,7 @@ const services: ServiceCard[] = [
     description:
       "Scalable server-side solutions with robust APIs, databases, and cloud integrations.",
     color: "from-[#0ea5e9] to-[#14b8a6]",
-    features: ["Node.js/Express", "Python/Django", "PostgreSQL", "MongoDB"],
+    features: ["Node.js/Express", "PostgreSQL", "MongoDB"],
     area: "md:[grid-area:1/7/2/13] xl:[grid-area:1/5/2/9]",
   },
   {
@@ -47,7 +49,7 @@ const services: ServiceCard[] = [
     description:
       "Cross-platform mobile apps with native performance and seamless user experiences.",
     color: "from-[#ec4899] to-[#f472b6]",
-    features: ["React Native", "Flutter", "iOS/Android", "App Store Deploy"],
+    features: ["React Native", "Flutter", "iOS/Android", ],
     area: "md:[grid-area:2/1/3/7] xl:[grid-area:1/9/2/13]",
   },
   {
@@ -79,7 +81,7 @@ const services: ServiceCard[] = [
     description:
       "Comprehensive security audits, testing strategies, and performance optimization.",
     color: "from-[#facc15] to-[#fb923c]",
-    features: ["Security Audits", "Unit Testing", "E2E Testing", "Performance"],
+    features: ["Security Audits", "Performance"],
     area: "xl:[grid-area:2/10/3/13] hidden md:block",
   },
 ];
@@ -107,6 +109,13 @@ export const ServicesSection = () => {
           <GridItem key={service.title} {...service} />
         ))}
       </ul>
+      <div className="flex justify-center mt-5 lg:mt-10">
+   
+          <Button asChild className="bg-gradient-to-r from-[#7c3aed] via-[#a855f7] to-[#22d3ee] hover:from-[#6d28d9] hover:via-[#9333ea] hover:to-[#0ea5e9] text-white py-3 disabled:opacity-50 shadow-lg shadow-[#7c3aed]/30">
+           <Link href={"#contact"} passHref className="cursor-pointer">Contact Me</Link>
+          </Button>
+    
+      </div>
     </div>
   );
 };
